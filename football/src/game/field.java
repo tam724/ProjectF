@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class field {
 	private static final Scanner SCANNER = new Scanner(System.in);
-	int field[][][] = new int[14][10][4]; // [breite][höhe][1-4(1:_, 2:|, 3:/,
-											// 4:\)]
+	int field[][][] = new int[14][10][4]; // [breite][höhe][1-4(0:_, 1:|, 2:/,
+											// 3:\)]
 											// 0:frei, 1:gesetzt
 	ball B = new ball();
 

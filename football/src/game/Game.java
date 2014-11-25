@@ -24,32 +24,29 @@ public class Game extends JPanel {
 		System.out.println(x + " "+y);
 		for (int i = 0; i < 14; i++) {
 			for (int j = 0; j < 10; j++) {
-				g.drawLine(x * i + 25, y * j + 20, x * i + 25,
-						y * j + 30);
-				g.drawLine(x * i + 20, y * j + 25, x * i + 30,
-						y * j + 25);
-				g.drawLine(x * i+20, y * j+20, x * i + 30, y * j + 30);
-				g.drawLine(x * i + 30, y * j+20, x * i+20, y * j + 30);
+				Graphics2D g23d = (Graphics2D)g;
+				Ellipse2D.Double circlepoint = new Ellipse2D.Double(i*x-2, j*y-2, 4, 4);
+				g23d.fill(circlepoint);
 				if(F.isBall(i, j)){
 					Graphics2D g2d = (Graphics2D)g;
-					Ellipse2D.Double circle = new Ellipse2D.Double(i*x+17, j*y+17, 20, 20);
+					Ellipse2D.Double circle = new Ellipse2D.Double(i*x-4, j*y-4, 8, 8);
 					g2d.fill(circle);
 				}
 				if (F.isGesetzt(i, j, 0)) {
-					g.drawLine(x * i + 50, y * j + 25, x * i + 100,
-							y * j + 25);
+					g.drawLine(x * i, y * j, x * i +x,
+							y * j);
 				}
 				if (F.isGesetzt(i, j, 1)) {
-					g.drawLine(x * i + 25, y * j + 50, x * i + 25,
-							y * j + 100);
+					g.drawLine(x * i, y * j, x * i,
+							y * j + y);
 				}
 				if (F.isGesetzt(i, j, 2)) {
-					g.drawLine(x * i + 50, y * j + 100, x * i + 100,
-							y * j + 50);
+					g.drawLine(x * i + x, y * j , x * i,
+							y * j + y);
 				}
 				if (F.isGesetzt(i, j, 3)) {
-					g.drawLine(x * i + 50, y * j + 50, x * i + 100,
-							y * j + 100);
+					g.drawLine(x * i, y * j, x * i + x,
+							y * j + y);
 				}
 			}
 		}
@@ -89,7 +86,7 @@ public class Game extends JPanel {
 			f.remove(A);
 			A = new Game();
 		}
-		while((!F.isEnd())||F.isGoooooool()==0);
+		while((!F.isEnd())||F.isGoooooool()==0||!F.nochmal());
 		if(F.isGoooooool()==1){
 			System.out.println("Player 1 hat gewonnen");
 		}
