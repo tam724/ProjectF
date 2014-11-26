@@ -1,18 +1,20 @@
 package game;
 
-import java.util.Scanner;
-
 public class field {
-	private static final Scanner SCANNER = new Scanner(System.in);
+	
 	int field[][][] = new int[14][10][4]; // [breite][höhe][1-4(0:_, 1:|, 2:/,
 											// 3:\)]
-											// 0:frei, 1:gesetzt
-	ball B = new ball();
+											// 0:frei, 1:Umrandung, 2:Spieler 1, 3:Spieler 2;
+	int Balli = 7;
+	int Ballj = 5;
+	
+	char pointer = 0;
 
 	public field() {
 		generateNewField();
 	}
 
+	//Setzen der Umrandung des Spielfeldes
 	private void generateNewField() {
 		for (int i = 0; i < 14; i++) {
 			for (int j = 0; j < 10; j++) {
@@ -72,7 +74,8 @@ public class field {
 		}
 	}
 
-	public void drawfield() {
+	//Ausgabe für Konsolenversion geht nicht mehr da mehrere Spieler
+	/*public void drawfield() {
 		boolean spaltegerade = true;
 		boolean zeilegerade = true;
 		for (int j = 0; j < 9; j++) {
@@ -80,7 +83,7 @@ public class field {
 				for (int i = 0; i < 13; i++) {
 					for (int m = 0; m < 2; m++) {
 						if (zeilegerade && spaltegerade) {
-							if (B.isBall(i, j)) {
+							if (isBall(i, j)) {
 								System.out.print("·");
 							} else {
 								System.out.print("+");
@@ -117,121 +120,133 @@ public class field {
 				zeilegerade = !zeilegerade;
 			}
 		}
-	}
+	}*/
 
+	//Abfrage eines einzelnen Wertes
 	public boolean isGesetzt(int i, int j, int k) {
-		if (field[i][j][k] == 1) {
+		if (field[i][j][k] == 1 || field[i][j][k]==2||field[i][j][k] ==3) {
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean nochmal(){
-		int i = B.i;
-		int j = B.j;
-		if((this.isGesetzt(i - 1, j - 1, 3))||
-				(this.isGesetzt(i, j - 1, 1))||
-				(this.isGesetzt(i, j - 1, 2))||
-				(this.isGesetzt(i - 1, j, 0))||
-				(this.isGesetzt(i, j, 0))||
-				(this.isGesetzt(i - 1, j, 2))||
-				(this.isGesetzt(i, j, 1))||
-				(this.isGesetzt(i, j, 3))){
-			return true;
-		}
-		return false;
-	}
-
+	//Abfrabe ob es noch einen Ausweg gibt
+	//Sind alle Striche um den Ball herum gezogen?
 	public boolean isEnd() {
-		int i = B.i;
-		int j = B.j;
-		if (field[i][j][0] == 1 && field[i][j][1] == 1 && field[i][j][3] == 1
-				&& field[i - 1][j][2] == 1 && field[i - 1][j][0] == 1
-				&& field[i][j - 1][2] == 1 && field[i][j - 1][1] == 1
-				&& field[i - 1][j - 1][3] == 1) {
+		if (field[Balli][Ballj][0] != 0 && field[Balli][Ballj][1] != 0 && field[Balli][Ballj][3] != 0
+				&& field[Balli - 1][Ballj][2] != 0 && field[Balli - 1][Ballj][0] != 0
+				&& field[Balli][Ballj - 1][2] != 0 && field[Balli][Ballj - 1][1] != 0
+				&& field[Balli - 1][Ballj - 1][3] != 0) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
+	//Liegt der Ball auf dem Punkt (i,j)
 	public boolean isBall(int i, int j) {
-		if (B.i == i && B.j == j)
+		if (Balli == i && Ballj == j)
 			return true;
 		return false;
 	}
 
+	//Ist in Schussrichtung schon ein Strich gezogen?
 	public boolean isValidShoot(char direction) { //
-		int i = B.i;
-		int j = B.j;
-		if((direction=='q'&&this.isGesetzt(i - 1, j - 1, 3))||
-				(direction == 'w' &&this.isGesetzt(i, j - 1, 1))||
-				(direction== 'e'&&this.isGesetzt(i, j - 1, 2))||
-				(direction =='a'&&this.isGesetzt(i - 1, j, 0))||
-				(direction == 'd'&&this.isGesetzt(i, j, 0))||
-				(direction =='y'&&this.isGesetzt(i - 1, j, 2))||
-				(direction =='x'&&this.isGesetzt(i, j, 1))||
-				(direction =='c'&&this.isGesetzt(i, j, 3))){
+		if((direction=='q'&&this.isGesetzt(Balli - 1, Ballj - 1, 3))||
+				(direction == 'w' &&this.isGesetzt(Balli, Ballj - 1, 1))||
+				(direction== 'e'&&this.isGesetzt(Balli, Ballj - 1, 2))||
+				(direction =='a'&&this.isGesetzt(Balli - 1, Ballj, 0))||
+				(direction == 'd'&&this.isGesetzt(Balli, Ballj, 0))||
+				(direction =='y'&&this.isGesetzt(Balli - 1, Ballj, 2))||
+				(direction =='x'&&this.isGesetzt(Balli, Ballj, 1))||
+				(direction =='c'&&this.isGesetzt(Balli, Ballj, 3))){
 					return false;
 				}
 			return true;
 		}
 
-
-	public void moveball(char direction) {
-		int i = B.i;
-		int j = B.j;
+	//Ball wird in angegebene Richtung bewegt und der Strich wird gesetzt
+	public void setShoot(char direction, int player) {
 		switch (direction) { // qweadyxc
 		case ('q'):
-			field[i - 1][j - 1][3] = 1;
+			field[Balli - 1][Ballj - 1][3] = player;
 			break;
 		case ('w'):
-			field[i][j - 1][1] = 1;
+			field[Balli][Ballj - 1][1] = player;
 			break;
 		case ('e'):
-			field[i][j - 1][2] = 1;
+			field[Balli][Ballj - 1][2] = player;
 			break;
 		case ('a'):
-			field[i - 1][j][0] = 1;
+			field[Balli - 1][Ballj][0] = player;
 			break;
 		case ('d'):
-			field[i][j][0] = 1;
+			field[Balli][Ballj][0] = player;
 			break;
 		case ('y'):
-			field[i - 1][j][2] = 1;
+			field[Balli - 1][Ballj][2] = player;
 			break;
 		case ('x'):
-			field[i][j][1] = 1;
+			field[Balli][Ballj][1] = player;
 			break;
 		case ('c'):
-			field[i][j][3] = 1;
+			field[Balli][Ballj][3] = player;
 			break;
 		}
-		B.move(direction);
 	}
-
+	public void moveBall(char direction){
+		switch (direction) { // qweadyxc
+		case ('q'):
+			Balli -= 1;
+			Ballj -=1;
+			break;
+		case ('w'):
+		Ballj -=1;
+			break;
+		case ('e'):
+		Balli += 1;
+		Ballj -=1;
+			break;
+		case ('a'):
+		Balli -= 1;
+			break;
+		case ('d'):
+		Balli += 1;
+			break;
+		case ('y'):
+		Balli -= 1;
+		Ballj +=1;
+			break;
+		case ('x'):
+		Ballj +=1;
+			break;
+		case ('c'):
+		Balli += 1;
+		Ballj +=1;
+			break;
+		}
+	}
+	
+	//Testet ob der Spieler nochmal ziehen kann
+	public boolean isTaken(char direction){
+		if (field[Balli][Ballj][0] != 0 || field[Balli][Ballj][1] != 0 || field[Balli][Ballj][3] != 0
+				|| field[Balli - 1][Ballj][2] != 0 || field[Balli - 1][Ballj][0] != 0
+				|| field[Balli][Ballj - 1][2] != 0 || field[Balli][Ballj - 1][1] != 0
+				|| field[Balli - 1][Ballj - 1][3] != 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	//Testet ob der Ball im Tor ist
 	public int isGoooooool() {
-		if ((B.i == 0) && (B.j == 3 || B.j == 4 || B.j == 5)) {
+		if (Balli == 1) {
 			return 1;
 		}
-		if ((B.i == 12) && (B.j == 3 || B.j == 4 || B.j == 5)) {
+		if (Balli == 13) {
 			return 2;
 		} else {
 			return 0;
-		}
-	}
-
-	public char shoot() {
-		while (true) {
-			System.out.print("Welche Richtung? qweadyxc");
-			char direction = SCANNER.next().charAt(0);
-			if (!(direction == 'q' || direction == 'w' || direction == 'e'
-					|| direction == 'a' || direction == 'd' || direction == 'y'
-					|| direction == 'x' || direction == 'c')) {
-				System.out.println("Bitte richtige Richtung eingeben!");
-				continue;
-			}
-			return direction;
 		}
 	}
 }
