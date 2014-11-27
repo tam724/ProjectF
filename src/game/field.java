@@ -92,7 +92,7 @@ public class field {
 	 * System.out.println(); zeilegerade = !zeilegerade; } } }
 	 */
 
-	// Abfrage eines einzelnen Wertes
+	// Abfrage ob ein Wert gesetzt ist
 	public boolean isGesetzt(int i, int j, int k) {
 		if (field[i][j][k] == 1 || field[i][j][k] == 2 || field[i][j][k] == 3) {
 			return true;
@@ -100,6 +100,11 @@ public class field {
 		return false;
 	}
 
+	//Gibt wert des Feldes zurück
+	public int getValue(int i, int j, int k){
+		return field[i][j][k];
+	}
+	
 	// Abfrabe ob es noch einen Ausweg gibt
 	// Sind alle Striche um den Ball herum gezogen?
 	public boolean isEnd() {
@@ -116,6 +121,8 @@ public class field {
 		}
 	}
 
+	//
+	
 	// Liegt der Ball auf dem Punkt (i,j)
 	public boolean isBall(int i, int j) {
 		if (Balli == i && Ballj == j)

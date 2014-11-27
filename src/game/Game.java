@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -14,7 +15,7 @@ public class Game extends JPanel implements MouseMotionListener,MouseListener {
 	static field F = new field();
 	static int sizey;
 	static int sizex;
-	static int whosturn = 1;
+	static int whosturn = 2;
 	static JFrame f = new JFrame();
 	static Component A = new Game();
 	char direction = 0;
@@ -85,15 +86,51 @@ public class Game extends JPanel implements MouseMotionListener,MouseListener {
 				}
 				if (F.isGesetzt(i, j, 0)) {
 					g.drawLine(x * i, y * j, x * i + x, y * j);
+					if(F.getValue(i, j, 0)==1){
+						g.setColor(Color.BLACK);
+					}
+					else if(F.getValue(i, j, 0)==2){
+						g.setColor(Color.RED);
+					}
+					else if(F.getValue(i, j, 0)==3){
+						g.setColor(Color.BLUE);
+					}
 				}
 				if (F.isGesetzt(i, j, 1)) {
 					g.drawLine(x * i, y * j, x * i, y * j + y);
+					if(F.getValue(i, j, 1)==1){
+						g.setColor(Color.BLACK);
+					}
+					else if(F.getValue(i, j, 1)==2){
+						g.setColor(Color.RED);
+					}
+					else if(F.getValue(i, j, 1)==3){
+						g.setColor(Color.BLUE);
+					}
 				}
 				if (F.isGesetzt(i, j, 2)) {
 					g.drawLine(x * i + x, y * j, x * i, y * j + y);
+					if(F.getValue(i, j, 0)==2){
+						g.setColor(Color.BLACK);
+					}
+					else if(F.getValue(i, j, 0)==2){
+						g.setColor(Color.RED);
+					}
+					else if(F.getValue(i, j, 0)==2){
+						g.setColor(Color.BLUE);
+					}
 				}
 				if (F.isGesetzt(i, j, 3)) {
 					g.drawLine(x * i, y * j, x * i + x, y * j + y);
+					if(F.getValue(i, j, 0)==3){
+						g.setColor(Color.BLACK);
+					}
+					else if(F.getValue(i, j, 0)==3){
+						g.setColor(Color.RED);
+					}
+					else if(F.getValue(i, j, 0)==3){
+						g.setColor(Color.BLUE);
+					}
 				}
 				
 			}
@@ -190,12 +227,23 @@ public class Game extends JPanel implements MouseMotionListener,MouseListener {
 	public void mouseClicked(MouseEvent arg0) {
 		direction = getDirection(arg0.getX(),arg0.getY());
 		if (F.isValidShoot(direction)) {
-			F.setShoot(direction, 1);
+			F.setShoot(direction, whosturn);
 			F.moveBall(direction);
 		} else {
 		JOptionPane.showMessageDialog(null, "Ungültiger Zug");
 		}
-		System.out.println(F.isTaken(direction));
+		if(F.isTaken(direction)){		//Spieler ist nochmal dran
+			
+		}
+		else{					//Spielerwechsel
+			if(whosturn==2){
+				whosturn =3;
+			}
+			else if(whosturn == 3){
+				whosturn = 2;
+			}
+		};
+		System.out.println("Spieler"+whosturn);
 		sizex = f.getWidth();
 		sizey = f.getHeight();
 		f.remove(A);
