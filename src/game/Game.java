@@ -195,7 +195,7 @@ public class Game extends JPanel implements MouseMotionListener,MouseListener {
 		} else {
 		JOptionPane.showMessageDialog(null, "Ungültiger Zug");
 		}
-		System.out.print(F.isTaken(direction));
+		System.out.println(F.isTaken(direction));
 		sizex = f.getWidth();
 		sizey = f.getHeight();
 		f.remove(A);
