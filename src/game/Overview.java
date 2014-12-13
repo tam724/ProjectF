@@ -1,26 +1,29 @@
 package game;
 
-import java.awt.Color;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Overview implements ActionListener {
-	private int playerone;
-	private int playertwo;
+	Player one;
+	Player two;
 	private boolean playeroneready = false;
 	private boolean playertwoready = false;
 	JFrame Frame = new JFrame();
 	JPanel Panel = new JPanel();
-	JButton one = new JButton();
-	JButton two = new JButton();
-	JButton quit = new JButton();
+	JButton ButtonOne = new JButton();
+	JButton ButtonTwo = new JButton();
+	JButton ButtonQuit = new JButton();
 	int starter = 0;
 
-	Overview(int i, int j, int winner) {
+	Overview(Player one, Player two, int winner) {
+		this.one = one;
+		this.two = two;
 		if (winner == 0){
 			starter = 1;
 		}
@@ -30,23 +33,25 @@ public class Overview implements ActionListener {
 		else if(winner == 2){
 			starter = 1;
 		}
-		this.playerone = i;
-		this.playertwo = j;
 
-		one.setBackground(Color.RED);
-		one.addActionListener(this);
-		setButtonText(one, playeroneready, playerone, 1);
+		Frame.setTitle("Project F >> "+one.score+" : "+ two.score);
+		Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ButtonOne.setBackground(one.color);
+		ButtonOne.addActionListener(this);
+		setButtonText(ButtonOne, playeroneready, one.score, 1);
 
-		two.setBackground(Color.BLUE);
-		two.addActionListener(this);
-		setButtonText(two, playertwoready, playertwo, 2);
+		ButtonTwo.setBackground(two.color);
+		ButtonTwo.addActionListener(this);
+		setButtonText(ButtonTwo, playertwoready, two.score, 2);
 
-		quit.setText("Beenden?");
+		ButtonQuit.setText("Beenden?");
+		ButtonQuit.addActionListener(this);
 		Frame.setSize(400, 400);
-		Panel.add(one, null);
-		Panel.add(two, null);
-		Panel.add(quit, null);
+		Panel.add(ButtonOne, null);
+		Panel.add(ButtonTwo, null);
+		Panel.add(ButtonQuit, null);
 		Frame.add(Panel);
+		Panel.setFont(Panel.getFont().deriveFont((float) 40));
 		Frame.setVisible(true);
 	}
 
@@ -61,7 +66,7 @@ public class Overview implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == this.one) {
+		if (e.getSource() == this.ButtonOne) {
 			if (playeroneready) {
 				playeroneready = false;
 			} else {
@@ -69,12 +74,12 @@ public class Overview implements ActionListener {
 			}
 			if(playeroneready && playertwoready){
 				Frame.dispose();
-				new Spiel(playerone, playertwo, starter);
+				new Spiel(one, two, starter);
 			}
-			setButtonText(one, playeroneready, playerone, 1);
+			setButtonText(ButtonOne, playeroneready, one.score, 1);
 			Panel.repaint();
 		}
-		if (e.getSource() == this.two) {
+		if (e.getSource() == this.ButtonTwo) {
 			if (playertwoready) {
 				playertwoready = false;
 			} else {
@@ -82,10 +87,23 @@ public class Overview implements ActionListener {
 			}
 			if(playeroneready && playertwoready){
 				Frame.dispose();
-				new Spiel(playerone, playertwo, starter);
+				new Spiel(one, two, starter);
 			}
-			setButtonText(two, playertwoready, playertwo, 2);
+			setButtonText(ButtonTwo, playertwoready, two.score, 2);
 			Panel.repaint();
+		}
+		if(e.getSource()== this.ButtonQuit){
+			if(one.score > two.score){
+				JOptionPane.showMessageDialog(null, "Spieler 1 hat gewonnen!");
+			}
+			if(one.score < two.score){
+				JOptionPane.showMessageDialog(null, "Spieler 2 hat gewonnen!");
+			}
+			if(one.score == two.score){
+				JOptionPane.showMessageDialog(null, "Gleichstand!");
+			}
+			Frame.dispose();
+			System.exit(0);
 		}
 
 	}
