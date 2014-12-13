@@ -2,21 +2,22 @@ package game;
 
 public class field {
 
-	int field[][][] = new int[14][10][4]; // [breite][höhe][1-4(0:_, 1:|, 2:/,
+	private int field[][][] = new int[14][10][4]; // [breite][höhe][1-4(0:_, 1:|, 2:/,
 											// 3:\)]
 											// 0:frei, 1:Umrandung, 2:Spieler 1,
 											// 3:Spieler 2;
 	int Balli = 7;
 	int Ballj = 5;
-
-	char pointer = 0;
-
-	public field() {
-		generateNewField();
-	}
-
+	private int player = 0;
+	
 	// Setzen der Umrandung des Spielfeldes
-	private void generateNewField() {
+	public field(int first) {
+		if(first == 1){
+			player = 2;
+		}
+		if(first == 2){
+			player = 3;
+		}
 		for (int i = 0; i < 14; i++) {
 			for (int j = 0; j < 10; j++) {
 				for (int k = 0; k < 4; k++) {
@@ -73,56 +74,11 @@ public class field {
 		}
 	}
 
-	// Ausgabe für Konsolenversion geht nicht mehr da mehrere Spieler
-	/*
-	 * public void drawfield() { boolean spaltegerade = true; boolean
-	 * zeilegerade = true; for (int j = 0; j < 9; j++) { for (int n = 0; n < 2;
-	 * n++) { for (int i = 0; i < 13; i++) { for (int m = 0; m < 2; m++) { if
-	 * (zeilegerade && spaltegerade) { if (isBall(i, j)) {
-	 * System.out.print("·"); } else { System.out.print("+"); } } else if
-	 * (zeilegerade && !spaltegerade) { if (field[i][j][0] == 1) {
-	 * System.out.print("-"); } else { System.out.print(" "); } } else if
-	 * (!zeilegerade && spaltegerade) { if (field[i][j][1] == 1) {
-	 * System.out.print("|"); } else { System.out.print(" "); } } else if
-	 * (!zeilegerade && !spaltegerade) { if (field[i][j][2] == 1 &&
-	 * field[i][j][3] == 0) { System.out.print("/"); } else if (field[i][j][2]
-	 * == 0 && field[i][j][3] == 1) { System.out.print("\\"); } else if
-	 * (field[i][j][2] == 1 && field[i][j][3] == 1) { System.out.print("x"); }
-	 * else { System.out.print(" "); } } spaltegerade = !spaltegerade; } }
-	 * System.out.println(); zeilegerade = !zeilegerade; } } }
-	 */
-
-	// Abfrage ob ein Wert gesetzt ist
-	public boolean isGesetzt(int i, int j, int k) {
-		if (field[i][j][k] == 1 || field[i][j][k] == 2 || field[i][j][k] == 3) {
-			return true;
-		}
-		return false;
-	}
-
-	//Gibt wert des Feldes zurück
-	public int getValue(int i, int j, int k){
+	// Gibt wert des Feldes zurück
+	public int getValue(int i, int j, int k) {
 		return field[i][j][k];
 	}
-	
-	// Abfrabe ob es noch einen Ausweg gibt
-	// Sind alle Striche um den Ball herum gezogen?
-	public boolean isEnd() {
-		if (field[Balli][Ballj][0] != 0 && field[Balli][Ballj][1] != 0
-				&& field[Balli][Ballj][3] != 0
-				&& field[Balli - 1][Ballj][2] != 0
-				&& field[Balli - 1][Ballj][0] != 0
-				&& field[Balli][Ballj - 1][2] != 0
-				&& field[Balli][Ballj - 1][1] != 0
-				&& field[Balli - 1][Ballj - 1][3] != 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 
-	//
-	
 	// Liegt der Ball auf dem Punkt (i,j)
 	public boolean isBall(int i, int j) {
 		if (Balli == i && Ballj == j)
@@ -131,205 +87,185 @@ public class field {
 	}
 
 	// Ist in Schussrichtung schon ein Strich gezogen?
-	public boolean isValidShoot(char direction) { //
-		if ((direction == 'q' && this.isGesetzt(Balli - 1, Ballj - 1, 3))
-				|| (direction == 'w' && this.isGesetzt(Balli, Ballj - 1, 1))
-				|| (direction == 'e' && this.isGesetzt(Balli, Ballj - 1, 2))
-				|| (direction == 'a' && this.isGesetzt(Balli - 1, Ballj, 0))
-				|| (direction == 'd' && this.isGesetzt(Balli, Ballj, 0))
-				|| (direction == 'y' && this.isGesetzt(Balli - 1, Ballj, 2))
-				|| (direction == 'x' && this.isGesetzt(Balli, Ballj, 1))
-				|| (direction == 'c' && this.isGesetzt(Balli, Ballj, 3))) {
+	private boolean isValidShoot(char direction) { //
+		if ((direction == 'q' && 0 != this.getValue(Balli - 1, Ballj - 1, 3))
+				|| (direction == 'w' && 0 != this.getValue(Balli, Ballj - 1, 1))
+				|| (direction == 'e' && 0 != this.getValue(Balli, Ballj - 1, 2))
+				|| (direction == 'a' && 0 != this.getValue(Balli - 1, Ballj, 0))
+				|| (direction == 'd' && 0 != this.getValue(Balli, Ballj, 0))
+				|| (direction == 'y' && 0 != this.getValue(Balli - 1, Ballj, 2))
+				|| (direction == 'x' && 0 != this.getValue(Balli, Ballj, 1))
+				|| (direction == 'c' && 0 != this.getValue(Balli, Ballj, 3))) {
 			return false;
 		}
 		return true;
 	}
 
 	// Ball wird in angegebene Richtung bewegt und der Strich wird gesetzt
-	public void setShoot(char direction, int player) {
-		switch (direction) { // qweadyxc
-		case ('q'):
-			field[Balli - 1][Ballj - 1][3] = player;
-			break;
-		case ('w'):
-			field[Balli][Ballj - 1][1] = player;
-			break;
-		case ('e'):
-			field[Balli][Ballj - 1][2] = player;
-			break;
-		case ('a'):
-			field[Balli - 1][Ballj][0] = player;
-			break;
-		case ('d'):
-			field[Balli][Ballj][0] = player;
-			break;
-		case ('y'):
-			field[Balli - 1][Ballj][2] = player;
-			break;
-		case ('x'):
-			field[Balli][Ballj][1] = player;
-			break;
-		case ('c'):
-			field[Balli][Ballj][3] = player;
-			break;
-		}
-	}
+	public boolean shoot(char direction) {
+		if (!isValidShoot(direction)) {
+			return false;
 
-	public void moveBall(char direction) {
-		switch (direction) { // qweadyxc
-		case ('q'):
-			Balli -= 1;
-			Ballj -= 1;
-			break;
-		case ('w'):
-			Ballj -= 1;
-			break;
-		case ('e'):
-			Balli += 1;
-			Ballj -= 1;
-			break;
-		case ('a'):
-			Balli -= 1;
-			break;
-		case ('d'):
-			Balli += 1;
-			break;
-		case ('y'):
-			Balli -= 1;
-			Ballj += 1;
-			break;
-		case ('x'):
-			Ballj += 1;
-			break;
-		case ('c'):
-			Balli += 1;
-			Ballj += 1;
-			break;
+		} else {
+			switch (direction) { // qweadyxc
+			case ('q'):
+				field[Balli - 1][Ballj - 1][3] = player;
+				Balli -= 1;
+				Ballj -= 1;
+				break;
+			case ('w'):
+				field[Balli][Ballj - 1][1] = player;
+				Ballj -= 1;
+				break;
+			case ('e'):
+				field[Balli][Ballj - 1][2] = player;
+				Balli += 1;
+				Ballj -= 1;
+				break;
+			case ('a'):
+				field[Balli - 1][Ballj][0] = player;
+				Balli -= 1;
+				break;
+			case ('d'):
+				field[Balli][Ballj][0] = player;
+				Balli += 1;
+				break;
+			case ('y'):
+				field[Balli - 1][Ballj][2] = player;
+				Balli -= 1;
+				Ballj += 1;
+				break;
+			case ('x'):
+				field[Balli][Ballj][1] = player;
+				Ballj += 1;
+				break;
+			case ('c'):
+				field[Balli][Ballj][3] = player;
+				Balli += 1;
+				Ballj += 1;
+				break;
+			}
+			again(direction);
+			return true;
 		}
 	}
 
 	// Testet ob der Spieler nochmal ziehen kann
-	public boolean isTaken(char direction) {
+	private void again(char direction) {
 		switch (direction) { // qweadyxc
 		case ('q'):
-			if (	field[Balli][Ballj][0] != 0 
+			if (field[Balli][Ballj][0] != 0
 					|| field[Balli][Ballj][1] != 0
-	//				|| field[Balli][Ballj][3] != 0
 					|| field[Balli - 1][Ballj][2] != 0
 					|| field[Balli - 1][Ballj][0] != 0
 					|| field[Balli][Ballj - 1][2] != 0
 					|| field[Balli][Ballj - 1][1] != 0
-					|| field[Balli - 1][Ballj - 1][3] != 0
-					) {
-				return true;
+					|| field[Balli - 1][Ballj - 1][3] != 0) {
+				return;
 			} else {
-				return false;
+				break;
 			}
 		case ('w'):
-				if (	field[Balli][Ballj][0] != 0 
-	//			|| field[Balli][Ballj][1] != 0
-				|| field[Balli][Ballj][3] != 0
-				|| field[Balli - 1][Ballj][2] != 0
-				|| field[Balli - 1][Ballj][0] != 0
-				|| field[Balli][Ballj - 1][2] != 0
-				|| field[Balli][Ballj - 1][1] != 0
-				|| field[Balli - 1][Ballj - 1][3] != 0
-				) {
-			return true;
-		} else {
-			return false;
-		}
-		case ('e'):
-			if (	field[Balli][Ballj][0] != 0 
-					|| field[Balli][Ballj][1] != 0
+			if (field[Balli][Ballj][0] != 0
 					|| field[Balli][Ballj][3] != 0
-			//		|| field[Balli - 1][Ballj][2] != 0
+					|| field[Balli - 1][Ballj][2] != 0
 					|| field[Balli - 1][Ballj][0] != 0
 					|| field[Balli][Ballj - 1][2] != 0
 					|| field[Balli][Ballj - 1][1] != 0
-					|| field[Balli - 1][Ballj - 1][3] != 0
-					) {
-				return true;
+					|| field[Balli - 1][Ballj - 1][3] != 0) {
+				return;
 			} else {
-				return false;
+				break;
+			}
+		case ('e'):
+			if (field[Balli][Ballj][0] != 0
+					|| field[Balli][Ballj][1] != 0
+					|| field[Balli][Ballj][3] != 0
+					|| field[Balli - 1][Ballj][0] != 0
+					|| field[Balli][Ballj - 1][2] != 0
+					|| field[Balli][Ballj - 1][1] != 0
+					|| field[Balli - 1][Ballj - 1][3] != 0) {
+				return;
+			} else {
+				break;
 			}
 		case ('a'):
-			if (	//field[Balli][Ballj][0] != 0 
-					 field[Balli][Ballj][1] != 0
-					|| field[Balli][Ballj][3] != 0
+			if (field[Balli][Ballj][1] != 0 || field[Balli][Ballj][3] != 0
 					|| field[Balli - 1][Ballj][2] != 0
 					|| field[Balli - 1][Ballj][0] != 0
 					|| field[Balli][Ballj - 1][2] != 0
 					|| field[Balli][Ballj - 1][1] != 0
-					|| field[Balli - 1][Ballj - 1][3] != 0
-					) {
-				return true;
+					|| field[Balli - 1][Ballj - 1][3] != 0) {
+				return;
 			} else {
-				return false;
+				break;
 			}
 		case ('d'):
-			if (	field[Balli][Ballj][0] != 0 
+			if (field[Balli][Ballj][0] != 0
 					|| field[Balli][Ballj][1] != 0
 					|| field[Balli][Ballj][3] != 0
 					|| field[Balli - 1][Ballj][2] != 0
-			//		|| field[Balli - 1][Ballj][0] != 0
 					|| field[Balli][Ballj - 1][2] != 0
 					|| field[Balli][Ballj - 1][1] != 0
-					|| field[Balli - 1][Ballj - 1][3] != 0
-					) {
-				return true;
+					|| field[Balli - 1][Ballj - 1][3] != 0) {
+				return;
 			} else {
-				return false;
+				break;
 			}
 		case ('y'):
-			if (	field[Balli][Ballj][0] != 0 
-					|| field[Balli][Ballj][1] != 0
+			if (field[Balli][Ballj][0] != 0 || field[Balli][Ballj][1] != 0
 					|| field[Balli][Ballj][3] != 0
 					|| field[Balli - 1][Ballj][2] != 0
 					|| field[Balli - 1][Ballj][0] != 0
-				//	|| field[Balli][Ballj - 1][2] != 0
 					|| field[Balli][Ballj - 1][1] != 0
-					|| field[Balli - 1][Ballj - 1][3] != 0
-					) {
-				return true;
+					|| field[Balli - 1][Ballj - 1][3] != 0) {
+				return;
 			} else {
-				return false;
+				break;
 			}
 		case ('x'):
-			if (	field[Balli][Ballj][0] != 0 
-					|| field[Balli][Ballj][1] != 0
+			if (field[Balli][Ballj][0] != 0 || field[Balli][Ballj][1] != 0
 					|| field[Balli][Ballj][3] != 0
 					|| field[Balli - 1][Ballj][2] != 0
 					|| field[Balli - 1][Ballj][0] != 0
 					|| field[Balli][Ballj - 1][2] != 0
-			//		|| field[Balli][Ballj - 1][1] != 0
-					|| field[Balli - 1][Ballj - 1][3] != 0
-					) {
-				return true;
+					|| field[Balli - 1][Ballj - 1][3] != 0) {
+				return;
 			} else {
-				return false;
+				break;
 			}
 		case ('c'):
-			if (	field[Balli][Ballj][0] != 0 
-					|| field[Balli][Ballj][1] != 0
+			if (field[Balli][Ballj][0] != 0 || field[Balli][Ballj][1] != 0
 					|| field[Balli][Ballj][3] != 0
 					|| field[Balli - 1][Ballj][2] != 0
 					|| field[Balli - 1][Ballj][0] != 0
 					|| field[Balli][Ballj - 1][2] != 0
 					|| field[Balli][Ballj - 1][1] != 0
-				//	|| field[Balli - 1][Ballj - 1][3] != 0
-					) {
-				return true;
+			) {
+				return;
 			} else {
-				return false;
+				break;
 			}
-		default:
-			return false;
+		}
+		if(player== 2){
+			player = 3;
+		}
+		else if(player == 3){
+			player = 2;
 		}
 	}
 
 	// Testet ob der Ball im Tor ist
-	public int isGoooooool() {
+	public int isWinner() {
+		if (field[Balli][Ballj][0] != 0 && field[Balli][Ballj][1] != 0
+				&& field[Balli][Ballj][3] != 0
+				&& field[Balli - 1][Ballj][2] != 0
+				&& field[Balli - 1][Ballj][0] != 0
+				&& field[Balli][Ballj - 1][2] != 0
+				&& field[Balli][Ballj - 1][1] != 0
+				&& field[Balli - 1][Ballj - 1][3] != 0) {
+			return player;
+		}
 		if (Balli == 1) {
 			return 1;
 		}
@@ -339,4 +275,9 @@ public class field {
 			return 0;
 		}
 	}
+	
+	public int getPlayer(){
+		return player;
+	}
+	
 }
