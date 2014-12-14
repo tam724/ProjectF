@@ -7,8 +7,10 @@ public class Player {
 	int score;
 	int id;
 	static int players = 0;
+	String name;
 	
-	Player(Color c){
+	Player(Color c, String name){
+		this.name = name;
 		id = players;
 		color = c;
 		players++;

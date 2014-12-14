@@ -35,6 +35,7 @@ public class Overview implements ActionListener {
 		}
 
 		Frame.setTitle("Project F >> "+one.score+" : "+ two.score);
+		Frame.toFront();
 		Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ButtonOne.setBackground(one.color);
 		ButtonOne.addActionListener(this);
@@ -57,8 +58,14 @@ public class Overview implements ActionListener {
 
 	void setButtonText(JButton button, boolean playerready, int score, int player) {
 		if (!playerready) {
-			button.setText("Player " + player + " : #" + score
+			if(button == ButtonOne){
+			button.setText(one.name+ " : #" + score
 					+ " Nochmal?");
+			}
+			else if(button == ButtonTwo){
+				button.setText(two.name+ " : #" + score
+						+ " Nochmal?");
+			}
 		} else {
 			button.setText("Rückgängig?");
 		}
@@ -94,10 +101,10 @@ public class Overview implements ActionListener {
 		}
 		if(e.getSource()== this.ButtonQuit){
 			if(one.score > two.score){
-				JOptionPane.showMessageDialog(null, "Spieler 1 hat gewonnen!");
+				JOptionPane.showMessageDialog(null, one.name+" hat gewonnen!");
 			}
 			if(one.score < two.score){
-				JOptionPane.showMessageDialog(null, "Spieler 2 hat gewonnen!");
+				JOptionPane.showMessageDialog(null, two.name+" hat gewonnen!");
 			}
 			if(one.score == two.score){
 				JOptionPane.showMessageDialog(null, "Gleichstand!");

@@ -27,8 +27,8 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
-			int x = Frame.getWidth() / 14;
-			int y = Frame.getHeight() / 10;
+			int x = Panel.getWidth() / 14;
+			int y = Panel.getHeight() / 10;
 			for (int i = 0; i < 14; i++) {
 				for (int j = 0; j < 10; j++) {
 					if (Feld.isBall(i, j)) {
@@ -142,6 +142,7 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 		Feld = new field(starter);
 		Frame.setTitle("Project F >> "+playerone+" : "+ playertwo);
 		Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Frame.toFront();
 		Frame.addMouseMotionListener(this);
 		Frame.addMouseListener(this);
 		Frame.setSize(1300, 900);
@@ -151,8 +152,8 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 	}
 
 	private char getDirection(int i, int j) {
-		int deltaj = j - (Feld.Ballj * (Panel.getWidth() / 14));
-		int deltai = i - (Feld.Balli * (Panel.getHeight() / 10));
+		int deltaj = j - ((Feld.Ballj) * (Panel.getWidth() / 14));
+		int deltai = i - ((Feld.Balli) * (Panel.getHeight() / 10));
 		double a = Math.toDegrees(Math.atan((double) deltaj / (double) deltai));
 		if (deltaj <= 0) {
 			if (a >= 0 && a < 22.5) {
@@ -189,11 +190,14 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 	private void setWinner() {
 		if (Feld.isWinner() != 0) {
 			Panel.repaint();
-			JOptionPane.showMessageDialog(null, "Spieler " + Feld.isWinner()
-					+ " hat gewonnen!");
+			
 			if (Feld.isWinner() == 1) {
+				JOptionPane.showMessageDialog(null, one.name
+						+ " hat gewonnen!");
 				one.score++;
 			} else if (Feld.isWinner() == 2) {
+				JOptionPane.showMessageDialog(null, two.name
+						+ " hat gewonnen!");
 				two.score++;
 			}
 			Frame.dispose();
