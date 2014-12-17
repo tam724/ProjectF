@@ -1,6 +1,6 @@
 ProjectF
 ========
-It is just a funny little game :) Just try it out!
+It is just a funny little game :)
 
 ========
 
