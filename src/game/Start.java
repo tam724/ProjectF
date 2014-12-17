@@ -29,27 +29,31 @@ public class Start implements ActionListener {
 		one = new Player(Color.RED, "tam");
 		two = new Player(Color.BLUE, "second");
 
-			NameOne.setText("Player 1");
-			ColorButtonOne.setBackground(Color.BLACK);
-			ColorButtonOne.addActionListener(this);
-			NameOneOk.setText("Ok?");
-			NameOneOk.addActionListener(this);
-		
-			NameTwo.setText("Player 2");
-			ColorButtonTwo.setBackground(Color.BLACK);
-			ColorButtonTwo.addActionListener(this);
-			NameTwoOk.setText("Ok?");
-			NameTwoOk.addActionListener(this);
-		
+		NameOne.setText("Player 1");
+		NameOne.setAlignmentX(0.0f);
+		ColorButtonOne.setBackground(Color.RED);
+		ColorButtonOne.addActionListener(this);
+		ColorButtonOne.setText("Farbe auswählen");
+		NameOneOk.setText("Ok?");
+		NameOneOk.addActionListener(this);
+
+		NameTwo.setText("Player 2");
+		ColorButtonTwo.setBackground(Color.BLUE);
+		ColorButtonTwo.addActionListener(this);
+		ColorButtonTwo.setText("Farbe auswählen");
+		NameTwoOk.setText("Ok?");
+		NameTwoOk.addActionListener(this);
+
 		Panel.add(NameOne);
 		Panel.add(ColorButtonOne);
 		Panel.add(NameOneOk);
+		
 		Panel.add(NameTwo);
 		Panel.add(ColorButtonTwo);
 		Panel.add(NameTwoOk);
 
 		Frame.add(Panel);
-		Frame.setSize(400, 400);
+		Frame.setSize(600, 100);
 		Frame.setVisible(true);
 		;
 
@@ -82,9 +86,7 @@ public class Start implements ActionListener {
 			}
 		}
 		if (e.getSource() == ColorButtonOne) {
-			if (ColorButtonOne.getBackground() == Color.BLACK)
-				ColorButtonOne.setBackground(Color.RED);
-			else if (ColorButtonOne.getBackground() == Color.RED)
+			if (ColorButtonOne.getBackground() == Color.RED)
 				ColorButtonOne.setBackground(Color.GREEN);
 			else if (ColorButtonOne.getBackground() == Color.GREEN)
 				ColorButtonOne.setBackground(Color.BLUE);
@@ -97,12 +99,14 @@ public class Start implements ActionListener {
 			else if (ColorButtonOne.getBackground() == Color.GRAY)
 				ColorButtonOne.setBackground(Color.PINK);
 			else if (ColorButtonOne.getBackground() == Color.PINK)
-				ColorButtonOne.setBackground(Color.BLACK);
+				ColorButtonOne.setBackground(Color.LIGHT_GRAY);
+			else if (ColorButtonOne.getBackground() == Color.LIGHT_GRAY)
+				ColorButtonOne.setBackground(Color.YELLOW);
+			else if (ColorButtonOne.getBackground() == Color.YELLOW)
+				ColorButtonOne.setBackground(Color.RED);
 		}
 		if (e.getSource() == ColorButtonTwo) {
-			if (ColorButtonTwo.getBackground() == Color.BLACK)
-				ColorButtonTwo.setBackground(Color.RED);
-			else if (ColorButtonTwo.getBackground() == Color.RED)
+			if (ColorButtonTwo.getBackground() == Color.RED)
 				ColorButtonTwo.setBackground(Color.GREEN);
 			else if (ColorButtonTwo.getBackground() == Color.GREEN)
 				ColorButtonTwo.setBackground(Color.BLUE);
@@ -115,9 +119,12 @@ public class Start implements ActionListener {
 			else if (ColorButtonTwo.getBackground() == Color.GRAY)
 				ColorButtonTwo.setBackground(Color.PINK);
 			else if (ColorButtonTwo.getBackground() == Color.PINK)
-				ColorButtonTwo.setBackground(Color.BLACK);
+				ColorButtonTwo.setBackground(Color.LIGHT_GRAY);
+			else if (ColorButtonTwo.getBackground() == Color.LIGHT_GRAY)
+				ColorButtonTwo.setBackground(Color.YELLOW);
+			else if (ColorButtonTwo.getBackground() == Color.YELLOW)
+				ColorButtonTwo.setBackground(Color.RED);
 		}
 
 	}
-
 }

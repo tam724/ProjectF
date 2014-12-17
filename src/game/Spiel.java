@@ -140,7 +140,7 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 		this.one = one;
 		this.two = two;
 		Feld = new field(starter);
-		Frame.setTitle("Project F >> "+playerone+" : "+ playertwo);
+		Frame.setTitle("Project F >> "+one.score+" : "+ two.score);
 		Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Frame.toFront();
 		Frame.addMouseMotionListener(this);
