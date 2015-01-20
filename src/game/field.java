@@ -27,11 +27,12 @@ public class field {
 	int Balli = 7;
 	int Ballj = 5;
 	private int player = 2;
+	private int prev_player = 0;
 
 	private Player one;
 	private Player two;
 	private static field testField;
-	private static int quality = 0;
+//	private static int quality = 0;
 	private static int max_turn_quality = 0;
 	private static int[] quality_of_direction = {0,-1,-1,-1,0,1,1,1};
 	public static ArrayList<String> pList = new ArrayList<String>();
@@ -331,6 +332,7 @@ public class field {
 				break;
 			}
 		}
+		prev_player = player;
 		if (player == 2) {
 			player = 3;
 		} else if (player == 3) {
@@ -373,51 +375,57 @@ public class field {
 	public int getPlayer() {
 		return player;
 	}
+	public int getPrev_Player() {
+		return prev_player;
+	}
 
 	// KI
 	public String getBestShoots() {
-		ArrayList<String> allShoots = new ArrayList<String>();
+//		ArrayList<String> allShoots = new ArrayList<String>();
+		String AI_shoot;
 
 		testField = new field(this);
 		pList.clear();
-		allShoots = testDirections("");
-		System.out.println(allShoots.toString());
-		System.out.println(max_turn_quality);
-		return "Hallo";
+		testDirections("", 0);
+		AI_shoot = pList.get((int) Math.floor(Math.random()*pList.size()));
+//		System.out.println(allShoots.toString());
+		System.out.println("shoot: "+AI_shoot);
+		System.out.println("Max: "+max_turn_quality);
+		return AI_shoot;
 	}
 
-	private ArrayList<String> testDirections(String turn) {
+	private void testDirections(String turn, int quality) {
+		int temp_quality;
 		for(int i = 0; i<8;i++){
+			temp_quality = quality;
 			//Durchläuft alle 8 Richtungen
 			if (testField.isValidShoot(i)) {
 				//Wenn ich in diese Richtung spielen kann
 				testField.shoot(i);
 				turn = turn + i;
-				quality += quality_of_direction[i];
-				System.out.print(quality+ " ");
+				temp_quality += quality_of_direction[i];
+				System.out.print(temp_quality+ " ");
 				if (testField.player == 3) {
 					//Wenn der Spieler nochmal an der Reihe ist -> Rekursion
-					testDirections(turn);
+					testDirections(turn, temp_quality);
 				} else {
 					//Wenn der Spieler nicht mehr an der Reihe ist -> Maximum testen
-					if(max_turn_quality < quality){
+					if(max_turn_quality < temp_quality){
 						//Wenn aktuell getesteter Zug besser als vorherige ist
 						pList.clear();
 						pList.add(turn);
-						max_turn_quality = quality;
+						max_turn_quality = temp_quality;
 					}
-					else if(max_turn_quality == quality){
+					else if(max_turn_quality == temp_quality){
 						//Wenn der beste und der aktuelle gleich gut sind
 						pList.add(turn);
 					}
-					quality = 0;
 					
 				}
 				turn = turn.substring(0, turn.length() - 1);
 				testField.goBack(i,3);
 			}
 		}
-		return pList;
 	}
 
 }

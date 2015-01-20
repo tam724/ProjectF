@@ -220,7 +220,7 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 	public void mouseClicked(MouseEvent e) {
 		Feld.shoot(getDirection(e.getX(), e.getY()));
 		setWinner();
-		if (Feld.getPlayer() == 3)
+		if (Feld.getPlayer() == 3 && Feld.getPrev_Player() != 3)
 			Feld.getBestShoots();
 		Panel.repaint();
 	}
