@@ -218,7 +218,12 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 		if (Feld.getPlayer() == 2) {
 			Feld.shoot(getDirection(e.getX(), e.getY()));
 		}else{
-			Feld.AI_turn();
+			String AI_shoots = Feld.getBestShoots();
+			for(int i = 0; i < AI_shoots.length(); i++)
+			{
+				System.out.println((int)AI_shoots.charAt(i)- 48);
+				Feld.AI_turn(((int) AI_shoots.charAt(i) - 48));
+			}
 		}
 		setWinner();
 		Panel.repaint();

@@ -425,15 +425,9 @@ public class field {
 	}
 	
 	//Bewegung der AI
-	public void AI_turn()
+	public void AI_turn(int dir)
 	{
-		String AI_shoots = getBestShoots();
-		for(int i = 0; i < AI_shoots.length(); i++)
-		{
-			System.out.println((int)AI_shoots.charAt(i)- 48);
-			shoot(((int) AI_shoots.charAt(i) - 48));
-		}
-		
+		shoot(dir);		
 	}
 
 }
