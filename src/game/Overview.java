@@ -20,19 +20,16 @@ public class Overview implements ActionListener {
 	JButton ButtonTwo = new JButton();
 	JButton Save = new JButton();
 	JButton ButtonQuit = new JButton();
-	int starter = 0;
+	Player starter;
 
-	Overview(Player one, Player two, int winner) {
+	Overview(Player one, Player two, Player winner) {
 		this.one = one;
 		this.two = two;
-		if (winner == 0){
-			starter = 1;
+		if (winner == one){
+			starter = two;
 		}
-		else if (winner == 1){
-			starter = 2;
-		}
-		else if(winner == 2){
-			starter = 1;
+		else if (winner == two){
+			starter = one;
 		}
 
 		Frame.setTitle("Project F >> "+one.score+" : "+ two.score);
@@ -86,7 +83,7 @@ public class Overview implements ActionListener {
 			}
 			if(playeroneready && playertwoready){
 				Frame.dispose();
-				new Spiel(one, two, starter);
+				new Spiel(one, two);
 			}
 			setButtonText(ButtonOne, playeroneready, one.score, 1);
 			Panel.repaint();
@@ -99,7 +96,7 @@ public class Overview implements ActionListener {
 			}
 			if(playeroneready && playertwoready){
 				Frame.dispose();
-				new Spiel(one, two, starter);
+				new Spiel(one, two);
 			}
 			setButtonText(ButtonTwo, playertwoready, two.score, 2);
 			Panel.repaint();

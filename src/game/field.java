@@ -6,36 +6,41 @@ import javax.swing.JOptionPane;
 
 public class field {
 	
-	static final int MOVE_UP = 0;
-	static final int MOVE_UP_RIGHT = 1;
-	static final int MOVE_RIGHT = 2;
-	static final int MOVE_DOWN_RIGHT = 3;
-	static final int MOVE_DOWN = 4;
-	static final int MOVE_DOWN_LEFT = 5;
-	static final int MOVE_LEFT = 6;
-	static final int MOVE_UP_LEFT = 7;
+	//DIRECTIONS TO SHOOT
+	static final int UP = 0;
+	static final int UP_RIGHT = 1;
+	static final int RIGHT = 2;
+	static final int DOWN_RIGHT = 3;
+	static final int DOWN = 4;
+	static final int DOWN_LEFT = 5;
+	static final int LEFT = 6;
+	static final int UP_LEFT = 7;
+	
+	//VALUES OF THE ARRAY
+	static final int FREE = 0;
+	static final int BORDER = 1;
+	static final int PLAYER_ONE = 2;
+	static final int PLAYER_TWO = 3;
+	static final int OUT_OF_GAME = 4;
 
-	// [höhe][breite][1-4(0:_, 1:|, 2:/,3:\)]
-	// 0:frei, 1:Spielfeldrand, 2:Spieler 1,
-	// 3:Spieler 2, 4:Außerhalb des Spielfeldes
+	private int[][][] field;	// [höhe][breite][1-4(0:_, 1:|, 2:/,3:\)]
 	int Balli = 7;
 	int Ballj = 5;
-	private int player = 0;
-	private int[][][] field;
+	private int player = 2;
+
+	private Player one;
+	private Player two;
 	private static field testField;
 	private static int quality = 0;
 	private static int max_turn_quality = 0;
 	private static int[] quality_of_direction = {0,-1,-1,-1,0,1,1,1};
 	public static ArrayList<String> pList = new ArrayList<String>();
 	// Setzen der Umrandung des Spielfeldes
-	public field(int first) {
-		if (first == 1) {
-			player = 2;
-		}
-		if (first == 2) {
-			player = 3;
-		}
-		;
+	public field(Player beginner, Player second) {
+		beginner.intern_id = 2;
+		one = beginner;
+		second.intern_id = 3;
+		two = second;
 
 		field = new int[][][] {
 				{ { 4, 4, 4, 4 }, { 4, 4, 4, 4 }, { 4, 4, 4, 4 },
@@ -120,14 +125,14 @@ public class field {
 
 	// Ist in Schussrichtung schon ein Strich gezogen?
 	private boolean isValidShoot(int direction) { //
-		if ((direction == MOVE_UP_LEFT && 0 != this.getValue(Balli - 1, Ballj - 1, 3))
-				|| (direction == MOVE_UP && 0 != this.getValue(Balli, Ballj - 1, 1))
-				|| (direction == MOVE_UP_RIGHT && 0 != this.getValue(Balli, Ballj - 1, 2))
-				|| (direction == MOVE_LEFT && 0 != this.getValue(Balli - 1, Ballj, 0))
-				|| (direction == MOVE_RIGHT && 0 != this.getValue(Balli, Ballj, 0))
-				|| (direction == MOVE_DOWN_LEFT && 0 != this.getValue(Balli - 1, Ballj, 2))
-				|| (direction == MOVE_DOWN && 0 != this.getValue(Balli, Ballj, 1))
-				|| (direction == MOVE_DOWN_RIGHT && 0 != this.getValue(Balli, Ballj, 3))) {
+		if ((direction == UP_LEFT && 0 != this.getValue(Balli - 1, Ballj - 1, 3))
+				|| (direction == UP && 0 != this.getValue(Balli, Ballj - 1, 1))
+				|| (direction == UP_RIGHT && 0 != this.getValue(Balli, Ballj - 1, 2))
+				|| (direction == LEFT && 0 != this.getValue(Balli - 1, Ballj, 0))
+				|| (direction == RIGHT && 0 != this.getValue(Balli, Ballj, 0))
+				|| (direction == DOWN_LEFT && 0 != this.getValue(Balli - 1, Ballj, 2))
+				|| (direction == DOWN && 0 != this.getValue(Balli, Ballj, 1))
+				|| (direction == DOWN_RIGHT && 0 != this.getValue(Balli, Ballj, 3))) {
 			return false;
 		}
 		return true;
@@ -141,38 +146,38 @@ public class field {
 
 		} else {
 			switch (direction) { // qweadyxc
-			case (MOVE_UP_LEFT):
+			case (UP_LEFT):
 				field[Ballj - 1][Balli - 1][3] = player;
 				Balli -= 1;
 				Ballj -= 1;
 				break;
-			case (MOVE_UP):
+			case (UP):
 				field[Ballj - 1][Balli][1] = player;
 				Ballj -= 1;
 				break;
-			case (MOVE_UP_RIGHT):
+			case (UP_RIGHT):
 				field[Ballj - 1][Balli][2] = player;
 				Balli += 1;
 				Ballj -= 1;
 				break;
-			case (MOVE_LEFT):
+			case (LEFT):
 				field[Ballj][Balli - 1][0] = player;
 				Balli -= 1;
 				break;
-			case (MOVE_RIGHT):
+			case (RIGHT):
 				field[Ballj][Balli][0] = player;
 				Balli += 1;
 				break;
-			case (MOVE_DOWN_LEFT):
+			case (DOWN_LEFT):
 				field[Ballj][Balli - 1][2] = player;
 				Balli -= 1;
 				Ballj += 1;
 				break;
-			case (MOVE_DOWN):
+			case (DOWN):
 				field[Ballj][Balli][1] = player;
 				Ballj += 1;
 				break;
-			case (MOVE_DOWN_RIGHT):
+			case (DOWN_RIGHT):
 				field[Ballj][Balli][3] = player;
 				Balli += 1;
 				Ballj += 1;
@@ -185,45 +190,45 @@ public class field {
 
 	public boolean goBack(int direction, int tempPlayer) {
 		switch (direction) { // qweadyxc
-		case (MOVE_UP_LEFT):
+		case (UP_LEFT):
 			Balli += 1;
 			Ballj += 1;
 			field[Ballj - 1][Balli - 1][3] = 0;
 
 			break;
-		case (MOVE_UP):
+		case (UP):
 			Ballj += 1;
 
 			field[Ballj - 1][Balli][1] = 0;
 			break;
-		case (MOVE_UP_RIGHT):
+		case (UP_RIGHT):
 			Balli -= 1;
 			Ballj += 1;
 			field[Ballj - 1][Balli][2] = 0;
 
 			break;
-		case (MOVE_LEFT):
+		case (LEFT):
 			Balli += 1;
 			field[Ballj][Balli - 1][0] = 0;
 
 			break;
-		case (MOVE_RIGHT):
+		case (RIGHT):
 			Balli -= 1;
 			field[Ballj][Balli][0] = 0;
 
 			break;
-		case (MOVE_DOWN_LEFT):
+		case (DOWN_LEFT):
 			Balli += 1;
 			Ballj -= 1;
 			field[Ballj][Balli - 1][2] = 0;
 
 			break;
-		case (MOVE_DOWN):
+		case (DOWN):
 			Ballj -= 1;
 			field[Ballj][Balli][1] = 0;
 
 			break;
-		case (MOVE_DOWN_RIGHT):
+		case (DOWN_RIGHT):
 			Balli -= 1;
 			Ballj -= 1;
 			field[Ballj][Balli][3] = 0;
@@ -237,7 +242,7 @@ public class field {
 	// Testet ob der Spieler nochmal ziehen kann
 	private void again(int direction) {
 		switch (direction) { // qweadyxc
-		case (MOVE_UP_LEFT):
+		case (UP_LEFT):
 			if (field[Ballj][Balli][0] != 0 || field[Ballj][Balli][1] != 0
 					|| field[Ballj][Balli - 1][2] != 0
 					|| field[Ballj][Balli - 1][0] != 0
@@ -248,7 +253,7 @@ public class field {
 			} else {
 				break;
 			}
-		case (MOVE_UP):
+		case (UP):
 			if (field[Ballj][Balli][0] != 0 || field[Ballj][Balli][3] != 0
 					|| field[Ballj][Balli - 1][2] != 0
 					|| field[Ballj][Balli - 1][0] != 0
@@ -259,7 +264,7 @@ public class field {
 			} else {
 				break;
 			}
-		case (MOVE_UP_RIGHT):
+		case (UP_RIGHT):
 			if (field[Ballj][Balli][0] != 0 || field[Ballj][Balli][1] != 0
 					|| field[Ballj][Balli][3] != 0
 					|| field[Ballj][Balli - 1][0] != 0
@@ -270,7 +275,7 @@ public class field {
 			} else {
 				break;
 			}
-		case (MOVE_LEFT):
+		case (LEFT):
 			if (field[Ballj][Balli][1] != 0 || field[Ballj][Balli][3] != 0
 					|| field[Ballj][Balli - 1][2] != 0
 					|| field[Ballj][Balli - 1][0] != 0
@@ -281,7 +286,7 @@ public class field {
 			} else {
 				break;
 			}
-		case (MOVE_RIGHT):
+		case (RIGHT):
 			if (field[Ballj][Balli][0] != 0 || field[Ballj][Balli][1] != 0
 					|| field[Ballj][Balli][3] != 0
 					|| field[Ballj][Balli - 1][2] != 0
@@ -292,7 +297,7 @@ public class field {
 			} else {
 				break;
 			}
-		case (MOVE_DOWN_LEFT):
+		case (DOWN_LEFT):
 			if (field[Ballj][Balli][0] != 0 || field[Ballj][Balli][1] != 0
 					|| field[Ballj][Balli][3] != 0
 					|| field[Ballj][Balli - 1][2] != 0
@@ -303,7 +308,7 @@ public class field {
 			} else {
 				break;
 			}
-		case (MOVE_DOWN):
+		case (DOWN):
 			if (field[Ballj][Balli][0] != 0 || field[Ballj][Balli][1] != 0
 					|| field[Ballj][Balli][3] != 0
 					|| field[Ballj][Balli - 1][2] != 0
@@ -314,7 +319,7 @@ public class field {
 			} else {
 				break;
 			}
-		case (MOVE_DOWN_RIGHT):
+		case (DOWN_RIGHT):
 			if (field[Ballj][Balli][0] != 0 || field[Ballj][Balli][1] != 0
 					|| field[Ballj][Balli][3] != 0
 					|| field[Ballj][Balli - 1][2] != 0
@@ -334,13 +339,13 @@ public class field {
 	}
 
 	// Testet ob der Ball im Tor ist
-	public int isWinner() {
+	public boolean isWinner(Player test) {
 
 		if (Balli == 1) {
-			return 2;
+			two.intern_winner= true;
 		}
 		if (Balli == 13) {
-			return 1;
+			one.intern_winner=true;
 		}
 		if (field[Ballj][Balli][0] != 0 && field[Ballj][Balli][1] != 0
 				&& field[Ballj][Balli][3] != 0
@@ -350,16 +355,19 @@ public class field {
 				&& field[Ballj - 1][Balli][1] != 0
 				&& field[Ballj - 1][Balli - 1][3] != 0) {
 			if (player == 2) {
-				return 2;
+				one.intern_winner=true;
 			}
 			if (player == 3) {
-				return 1;
-			} else {
-				return 0;
+				two.intern_winner = true;
 			}
-		} else {
-			return 0;
 		}
+		if(test == one && one.intern_winner==true){
+			return true;
+		}
+		else if(test == two && two.intern_winner == true){
+			return true;
+		}
+		return false;
 	}
 
 	public int getPlayer() {

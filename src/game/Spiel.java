@@ -46,28 +46,28 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 						}
 						g2.setStroke(new BasicStroke(1));
 						switch (pointer) {
-						case (field.MOVE_UP_LEFT):
+						case (field.UP_LEFT):
 							g2.drawLine(i * x, j * y, i * x - x, j * y - y);
 							break;
-						case (field.MOVE_UP):
+						case (field.UP):
 							g2.drawLine(i * x, j * y, i * x, j * y - y);
 							break;
-						case (field.MOVE_UP_RIGHT):
+						case (field.UP_RIGHT):
 							g2.drawLine(i * x, j * y, i * x + x, j * y - y);
 							break;
-						case (field.MOVE_LEFT):
+						case (field.LEFT):
 							g2.drawLine(i * x, j * y, i * x - x, j * y);
 							break;
-						case (field.MOVE_RIGHT):
+						case (field.RIGHT):
 							g2.drawLine(i * x, j * y, i * x + x, j * y);
 							break;
-						case (field.MOVE_DOWN_LEFT):
+						case (field.DOWN_LEFT):
 							g2.drawLine(i * x, j * y, i * x - x, j * y + y);
 							break;
-						case (field.MOVE_DOWN):
+						case (field.DOWN):
 							g2.drawLine(i * x, j * y, i * x, j * y + y);
 							break;
-						case (field.MOVE_DOWN_RIGHT):
+						case (field.DOWN_RIGHT):
 							g2.drawLine(i * x, j * y, i * x + x, j * y + y);
 							break;
 						}
@@ -135,11 +135,11 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 	Player one;
 	Player two;
 
-	public Spiel(Player one, Player two, int starter) {
+	public Spiel(Player one, Player two) {
 
 		this.one = one;
 		this.two = two;
-		Feld = new field(starter);
+		Feld = new field(one,two);
 		Frame.setTitle("Project F >> " + one.score + " : " + two.score);
 		Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Frame.toFront();
@@ -157,61 +157,49 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 		double a = Math.toDegrees(Math.atan((double) deltaj / (double) deltai));
 		if (deltaj <= 0) {
 			if (a >= 0 && a < 22.5) {
-				return field.MOVE_LEFT;
+				return field.LEFT;
 			} else if (a >= 22.5 && a < 67.5) {
-				return field.MOVE_UP_LEFT;
+				return field.UP_LEFT;
 			} else if (a > 67.5) {
-				return field.MOVE_UP;
+				return field.UP;
 			} else if (a <= 0 && a > -22.5) {
-				return field.MOVE_RIGHT;
+				return field.RIGHT;
 			} else if (a <= -22.5 && a > -67.5) {
-				return field.MOVE_UP_RIGHT;
+				return field.UP_RIGHT;
 			} else if (a < -67.5) {
-				return field.MOVE_UP;
+				return field.UP;
 			}
 		} else if (deltaj > 0) {
 			if (a >= 0 && a < 22.5) {
-				return field.MOVE_RIGHT;
+				return field.RIGHT;
 			} else if (a >= 22.5 && a < 67.5) {
-				return field.MOVE_DOWN_RIGHT;
+				return field.DOWN_RIGHT;
 			} else if (a > 67.5) {
-				return field.MOVE_DOWN;
+				return field.DOWN;
 			} else if (a <= 0 && a > -22.5) {
-				return field.MOVE_LEFT;
+				return field.LEFT;
 			} else if (a <= -22.5 && a > -67.5) {
-				return field.MOVE_DOWN_LEFT;
+				return field.DOWN_LEFT;
 			} else if (a < -67.5) {
-				return field.MOVE_DOWN;
+				return field.DOWN;
 			}
 		}
 		return 0;
 	}
 
 	private void setWinner() {
-
-		if (Feld.isWinner() != 0) {
-			Panel.repaint();
-			if (one.name.equals("tam")) {
-				JOptionPane.showMessageDialog(null,
-						"tam hat auch gewonnen! Einfach weil er cool ist :)");
-				one.score++;
-			}
-			if (two.name.equals("tam")) {
-				JOptionPane.showMessageDialog(null,
-						"tam hat auch gewonnen! Einfach weil er cool ist :)");
-				two.score++;
-			}
-			if (Feld.isWinner() == 1) {
-				JOptionPane
-						.showMessageDialog(null, one.name + " hat gewonnen!");
-				one.score++;
-			} else if (Feld.isWinner() == 2) {
-				JOptionPane
-						.showMessageDialog(null, two.name + " hat gewonnen!");
-				two.score++;
-			}
+		
+		if(Feld.isWinner(one)){
+			JOptionPane
+			.showMessageDialog(null, one.name + " hat gewonnen!");
 			Frame.dispose();
-			new Overview(one, two, Feld.isWinner());
+			new Overview(one, two, one);
+		}
+		else if(Feld.isWinner(two)){
+			JOptionPane
+			.showMessageDialog(null, two.name + " hat gewonnen!");
+			Frame.dispose();
+			new Overview(one, two, two);
 		}
 	}
 

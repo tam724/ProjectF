@@ -70,7 +70,7 @@ public class Start implements ActionListener {
 			oneOk = true;
 			if(oneOk && twoOk){
 				Frame.dispose();
-				new Spiel(one, two, 1);
+				new Spiel(one, two);
 			}
 		}
 		if (e.getSource() == NameTwoOk) {
@@ -82,7 +82,7 @@ public class Start implements ActionListener {
 			twoOk = true;
 			if(oneOk && twoOk){
 				Frame.dispose();
-				new Spiel(one, two, 1);
+				new Spiel(one, two);
 			}
 		}
 		if (e.getSource() == ColorButtonOne) {
