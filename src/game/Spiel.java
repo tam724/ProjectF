@@ -32,7 +32,7 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 			for (int i = 0; i < 14; i++) {
 				for (int j = 0; j < 10; j++) {
 					if (Feld.isBall(i, j)) {
-						
+
 						// Ball
 						Ellipse2D.Double circlepoint = new Ellipse2D.Double(i
 								* x - 4, j * y - 4, 8, 8);
@@ -46,37 +46,37 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 						}
 						g2.setStroke(new BasicStroke(1));
 						switch (pointer) {
-						case ('q'):
+						case (field.MOVE_UP_LEFT):
 							g2.drawLine(i * x, j * y, i * x - x, j * y - y);
 							break;
-						case ('w'):
+						case (field.MOVE_UP):
 							g2.drawLine(i * x, j * y, i * x, j * y - y);
 							break;
-						case ('e'):
+						case (field.MOVE_UP_RIGHT):
 							g2.drawLine(i * x, j * y, i * x + x, j * y - y);
 							break;
-						case ('a'):
+						case (field.MOVE_LEFT):
 							g2.drawLine(i * x, j * y, i * x - x, j * y);
 							break;
-						case ('d'):
+						case (field.MOVE_RIGHT):
 							g2.drawLine(i * x, j * y, i * x + x, j * y);
 							break;
-						case ('y'):
+						case (field.MOVE_DOWN_LEFT):
 							g2.drawLine(i * x, j * y, i * x - x, j * y + y);
 							break;
-						case ('x'):
+						case (field.MOVE_DOWN):
 							g2.drawLine(i * x, j * y, i * x, j * y + y);
 							break;
-						case ('c'):
+						case (field.MOVE_DOWN_RIGHT):
 							g2.drawLine(i * x, j * y, i * x + x, j * y + y);
 							break;
 						}
 					}
-					
+
 					// Linien
 					g2.setColor(Color.BLACK);
 					g2.setStroke(new BasicStroke(4));
-					if (Feld.getValue(i, j, 0) == 1 ) {
+					if (Feld.getValue(i, j, 0) == 1) {
 						g2.setColor(Color.BLACK);
 						g2.drawLine(x * i, y * j, x * i + x, y * j);
 					} else if (Feld.getValue(i, j, 0) == 2) {
@@ -87,7 +87,7 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 						g2.drawLine(x * i, y * j, x * i + x, y * j);
 					}
 
-					if (Feld.getValue(i, j, 1) == 1 ) {
+					if (Feld.getValue(i, j, 1) == 1) {
 						g2.setColor(Color.BLACK);
 						g2.drawLine(x * i, y * j, x * i, y * j + y);
 					} else if (Feld.getValue(i, j, 1) == 2) {
@@ -98,7 +98,7 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 						g2.drawLine(x * i, y * j, x * i, y * j + y);
 					}
 
-					if (Feld.getValue(i, j, 2) == 1 ) {
+					if (Feld.getValue(i, j, 2) == 1) {
 						g2.setColor(Color.BLACK);
 						g2.drawLine(x * i + x, y * j, x * i, y * j + y);
 					} else if (Feld.getValue(i, j, 2) == 2) {
@@ -109,7 +109,7 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 						g2.drawLine(x * i + x, y * j, x * i, y * j + y);
 					}
 
-					if (Feld.getValue(i, j, 3) == 1 ) {
+					if (Feld.getValue(i, j, 3) == 1) {
 						g2.setColor(Color.BLACK);
 						g2.drawLine(x * i, y * j, x * i + x, y * j + y);
 					} else if (Feld.getValue(i, j, 3) == 2) {
@@ -129,7 +129,7 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 			}
 		}
 	};
-	char pointer = 0;
+	int pointer = 0;
 	int playerone;
 	int playertwo;
 	Player one;
@@ -140,7 +140,7 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 		this.one = one;
 		this.two = two;
 		Feld = new field(starter);
-		Frame.setTitle("Project F >> "+one.score+" : "+ two.score);
+		Frame.setTitle("Project F >> " + one.score + " : " + two.score);
 		Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Frame.toFront();
 		Frame.addMouseMotionListener(this);
@@ -151,53 +151,63 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 		Frame.setVisible(true);
 	}
 
-	private char getDirection(int i, int j) {
+	private int getDirection(int i, int j) {
 		int deltaj = j - ((Feld.Ballj) * (Panel.getWidth() / 14));
 		int deltai = i - ((Feld.Balli) * (Panel.getHeight() / 10));
 		double a = Math.toDegrees(Math.atan((double) deltaj / (double) deltai));
 		if (deltaj <= 0) {
 			if (a >= 0 && a < 22.5) {
-				return 'a';
+				return field.MOVE_LEFT;
 			} else if (a >= 22.5 && a < 67.5) {
-				return 'q';
+				return field.MOVE_UP_LEFT;
 			} else if (a > 67.5) {
-				return 'w';
+				return field.MOVE_UP;
 			} else if (a <= 0 && a > -22.5) {
-				return 'd';
+				return field.MOVE_RIGHT;
 			} else if (a <= -22.5 && a > -67.5) {
-				return 'e';
+				return field.MOVE_UP_RIGHT;
 			} else if (a < -67.5) {
-				return 'w';
+				return field.MOVE_UP;
 			}
 		} else if (deltaj > 0) {
 			if (a >= 0 && a < 22.5) {
-				return 'd';
+				return field.MOVE_RIGHT;
 			} else if (a >= 22.5 && a < 67.5) {
-				return 'c';
+				return field.MOVE_DOWN_RIGHT;
 			} else if (a > 67.5) {
-				return 'x';
+				return field.MOVE_DOWN;
 			} else if (a <= 0 && a > -22.5) {
-				return 'a';
+				return field.MOVE_LEFT;
 			} else if (a <= -22.5 && a > -67.5) {
-				return 'y';
+				return field.MOVE_DOWN_LEFT;
 			} else if (a < -67.5) {
-				return 'x';
+				return field.MOVE_DOWN;
 			}
 		}
 		return 0;
 	}
 
 	private void setWinner() {
+
 		if (Feld.isWinner() != 0) {
 			Panel.repaint();
-			
+			if (one.name.equals("tam")) {
+				JOptionPane.showMessageDialog(null,
+						"tam hat auch gewonnen! Einfach weil er cool ist :)");
+				one.score++;
+			}
+			if (two.name.equals("tam")) {
+				JOptionPane.showMessageDialog(null,
+						"tam hat auch gewonnen! Einfach weil er cool ist :)");
+				two.score++;
+			}
 			if (Feld.isWinner() == 1) {
-				JOptionPane.showMessageDialog(null, one.name
-						+ " hat gewonnen!");
+				JOptionPane
+						.showMessageDialog(null, one.name + " hat gewonnen!");
 				one.score++;
 			} else if (Feld.isWinner() == 2) {
-				JOptionPane.showMessageDialog(null, two.name
-						+ " hat gewonnen!");
+				JOptionPane
+						.showMessageDialog(null, two.name + " hat gewonnen!");
 				two.score++;
 			}
 			Frame.dispose();
@@ -222,8 +232,9 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 	public void mouseClicked(MouseEvent e) {
 		Feld.shoot(getDirection(e.getX(), e.getY()));
 		setWinner();
+		if (Feld.getPlayer() == 3)
+			Feld.getBestShoots();
 		Panel.repaint();
-
 	}
 
 	@Override

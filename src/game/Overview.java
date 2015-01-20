@@ -18,6 +18,7 @@ public class Overview implements ActionListener {
 	JPanel Panel = new JPanel();
 	JButton ButtonOne = new JButton();
 	JButton ButtonTwo = new JButton();
+	JButton Save = new JButton();
 	JButton ButtonQuit = new JButton();
 	int starter = 0;
 
@@ -47,10 +48,14 @@ public class Overview implements ActionListener {
 
 		ButtonQuit.setText("Beenden?");
 		ButtonQuit.addActionListener(this);
+		
+		Save.setText("Speichern?");
+		Save.addActionListener(this);
 		Frame.setSize(400, 400);
 		Panel.add(ButtonOne, null);
 		Panel.add(ButtonTwo, null);
 		Panel.add(ButtonQuit, null);
+		Panel.add(Save,null);
 		Frame.add(Panel);
 		Panel.setFont(Panel.getFont().deriveFont((float) 40));
 		Frame.setVisible(true);
@@ -111,6 +116,9 @@ public class Overview implements ActionListener {
 			}
 			Frame.dispose();
 			System.exit(0);
+		}
+		if(e.getSource() == this.Save){
+			
 		}
 
 	}
