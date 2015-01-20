@@ -32,7 +32,6 @@ public class field {
 	private Player one;
 	private Player two;
 	private static field testField;
-//	private static int quality = 0;
 	private static int max_turn_quality = 0;
 	private static int[] quality_of_direction = {0,-1,-1,-1,0,1,1,1};
 	public static ArrayList<String> pList = new ArrayList<String>();
@@ -184,6 +183,7 @@ public class field {
 				Ballj += 1;
 				break;
 			}
+			prev_player = player;
 			again(direction);
 			return true;
 		}
@@ -332,7 +332,6 @@ public class field {
 				break;
 			}
 		}
-		prev_player = player;
 		if (player == 2) {
 			player = 3;
 		} else if (player == 3) {
@@ -381,16 +380,14 @@ public class field {
 
 	// KI
 	public String getBestShoots() {
-//		ArrayList<String> allShoots = new ArrayList<String>();
 		String AI_shoot;
 
 		testField = new field(this);
 		pList.clear();
+		max_turn_quality = 0;
 		testDirections("", 0);
-		AI_shoot = pList.get((int) Math.floor(Math.random()*pList.size()));
-//		System.out.println(allShoots.toString());
-		System.out.println("shoot: "+AI_shoot);
-		System.out.println("Max: "+max_turn_quality);
+		AI_shoot = pList.get((int) Math.floor(1+Math.random()*(pList.size()-1)));
+		System.out.println("\n shoot: "+AI_shoot);
 		return AI_shoot;
 	}
 
@@ -404,7 +401,6 @@ public class field {
 				testField.shoot(i);
 				turn = turn + i;
 				temp_quality += quality_of_direction[i];
-				System.out.print(temp_quality+ " ");
 				if (testField.player == 3) {
 					//Wenn der Spieler nochmal an der Reihe ist -> Rekursion
 					testDirections(turn, temp_quality);
