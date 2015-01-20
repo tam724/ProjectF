@@ -152,8 +152,8 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 	}
 
 	private int getDirection(int i, int j) {
-		int deltaj = j - ((Feld.Ballj) * (Panel.getWidth() / 14));
-		int deltai = i - ((Feld.Balli) * (Panel.getHeight() / 10));
+		int deltaj = j - ((Feld.Bally) * (Panel.getWidth() / 14));
+		int deltai = i - ((Feld.Ballx) * (Panel.getHeight() / 10));
 		double a = Math.toDegrees(Math.atan((double) deltaj / (double) deltai));
 		if (deltaj <= 0) {
 			if (a >= 0 && a < 22.5) {
@@ -217,16 +217,16 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 	public void mouseClicked(MouseEvent e) {
 		if (Feld.getPlayer() == 2) {
 			Feld.shoot(getDirection(e.getX(), e.getY()));
-		}else{
-			String AI_shoots = Feld.getBestShoots();
-			for(int i = 0; i < AI_shoots.length(); i++)
-			{
-				System.out.println((int)AI_shoots.charAt(i)- 48);
-				Feld.AI_turn(((int) AI_shoots.charAt(i) - 48));
+			setWinner();
+			Panel.repaint();
+		} else {
+			String AI_shoot = Feld.getBestShoot();
+			for (int i = 0; i < AI_shoot.length(); i++) {
+				Feld.shoot(((int) AI_shoot.charAt(i) - 48));
+				setWinner();
+				Panel.repaint();
 			}
 		}
-		setWinner();
-		Panel.repaint();
 	}
 
 	@Override

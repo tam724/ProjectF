@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 
@@ -24,8 +25,8 @@ public class field {
 	static final int OUT_OF_GAME = 4;
 
 	private int[][][] field;	// [höhe][breite][1-4(0:_, 1:|, 2:/,3:\)]
-	int Balli = 7;
-	int Ballj = 5;
+	int Ballx = 7;
+	int Bally = 5;
 	private int player = 2;
 	private int prev_player = 0;
 
@@ -97,8 +98,8 @@ public class field {
 	}
 
 	public field(field toCopy) {
-		this.Balli = toCopy.Balli;
-		this.Ballj = toCopy.Ballj;
+		this.Ballx = toCopy.Ballx;
+		this.Bally = toCopy.Bally;
 		this.player = toCopy.player;
 		this.field = new int[10][14][4];
 		for (int i = 0; i < 10; i++) {
@@ -118,21 +119,21 @@ public class field {
 
 	// Liegt der Ball auf dem Punkt (i,j)
 	public boolean isBall(int i, int j) {
-		if (Balli == i && Ballj == j)
+		if (Ballx == i && Bally == j)
 			return true;
 		return false;
 	}
 
 	// Ist in Schussrichtung schon ein Strich gezogen?
 	private boolean isValidShoot(int direction) { //
-		if ((direction == UP_LEFT && 0 != this.getValue(Balli - 1, Ballj - 1, 3))
-				|| (direction == UP && 0 != this.getValue(Balli, Ballj - 1, 1))
-				|| (direction == UP_RIGHT && 0 != this.getValue(Balli, Ballj - 1, 2))
-				|| (direction == LEFT && 0 != this.getValue(Balli - 1, Ballj, 0))
-				|| (direction == RIGHT && 0 != this.getValue(Balli, Ballj, 0))
-				|| (direction == DOWN_LEFT && 0 != this.getValue(Balli - 1, Ballj, 2))
-				|| (direction == DOWN && 0 != this.getValue(Balli, Ballj, 1))
-				|| (direction == DOWN_RIGHT && 0 != this.getValue(Balli, Ballj, 3))) {
+		if ((direction == UP_LEFT && 0 != this.getValue(Ballx - 1, Bally - 1, 3))
+				|| (direction == UP && 0 != this.getValue(Ballx, Bally - 1, 1))
+				|| (direction == UP_RIGHT && 0 != this.getValue(Ballx, Bally - 1, 2))
+				|| (direction == LEFT && 0 != this.getValue(Ballx - 1, Bally, 0))
+				|| (direction == RIGHT && 0 != this.getValue(Ballx, Bally, 0))
+				|| (direction == DOWN_LEFT && 0 != this.getValue(Ballx - 1, Bally, 2))
+				|| (direction == DOWN && 0 != this.getValue(Ballx, Bally, 1))
+				|| (direction == DOWN_RIGHT && 0 != this.getValue(Ballx, Bally, 3))) {
 			return false;
 		}
 		return true;
@@ -147,40 +148,40 @@ public class field {
 		} else {
 			switch (direction) { // qweadyxc
 			case (UP_LEFT):
-				field[Ballj - 1][Balli - 1][3] = player;
-				Balli -= 1;
-				Ballj -= 1;
+				field[Bally - 1][Ballx - 1][3] = player;
+				Ballx -= 1;
+				Bally -= 1;
 				break;
 			case (UP):
-				field[Ballj - 1][Balli][1] = player;
-				Ballj -= 1;
+				field[Bally - 1][Ballx][1] = player;
+				Bally -= 1;
 				break;
 			case (UP_RIGHT):
-				field[Ballj - 1][Balli][2] = player;
-				Balli += 1;
-				Ballj -= 1;
+				field[Bally - 1][Ballx][2] = player;
+				Ballx += 1;
+				Bally -= 1;
 				break;
 			case (LEFT):
-				field[Ballj][Balli - 1][0] = player;
-				Balli -= 1;
+				field[Bally][Ballx - 1][0] = player;
+				Ballx -= 1;
 				break;
 			case (RIGHT):
-				field[Ballj][Balli][0] = player;
-				Balli += 1;
+				field[Bally][Ballx][0] = player;
+				Ballx += 1;
 				break;
 			case (DOWN_LEFT):
-				field[Ballj][Balli - 1][2] = player;
-				Balli -= 1;
-				Ballj += 1;
+				field[Bally][Ballx - 1][2] = player;
+				Ballx -= 1;
+				Bally += 1;
 				break;
 			case (DOWN):
-				field[Ballj][Balli][1] = player;
-				Ballj += 1;
+				field[Bally][Ballx][1] = player;
+				Bally += 1;
 				break;
 			case (DOWN_RIGHT):
-				field[Ballj][Balli][3] = player;
-				Balli += 1;
-				Ballj += 1;
+				field[Bally][Ballx][3] = player;
+				Ballx += 1;
+				Bally += 1;
 				break;
 			}
 			prev_player = player;
@@ -192,47 +193,47 @@ public class field {
 	public boolean goBack(int direction, int tempPlayer) {
 		switch (direction) { // qweadyxc
 		case (UP_LEFT):
-			Balli += 1;
-			Ballj += 1;
-			field[Ballj - 1][Balli - 1][3] = 0;
+			Ballx += 1;
+			Bally += 1;
+			field[Bally - 1][Ballx - 1][3] = 0;
 
 			break;
 		case (UP):
-			Ballj += 1;
+			Bally += 1;
 
-			field[Ballj - 1][Balli][1] = 0;
+			field[Bally - 1][Ballx][1] = 0;
 			break;
 		case (UP_RIGHT):
-			Balli -= 1;
-			Ballj += 1;
-			field[Ballj - 1][Balli][2] = 0;
+			Ballx -= 1;
+			Bally += 1;
+			field[Bally - 1][Ballx][2] = 0;
 
 			break;
 		case (LEFT):
-			Balli += 1;
-			field[Ballj][Balli - 1][0] = 0;
+			Ballx += 1;
+			field[Bally][Ballx - 1][0] = 0;
 
 			break;
 		case (RIGHT):
-			Balli -= 1;
-			field[Ballj][Balli][0] = 0;
+			Ballx -= 1;
+			field[Bally][Ballx][0] = 0;
 
 			break;
 		case (DOWN_LEFT):
-			Balli += 1;
-			Ballj -= 1;
-			field[Ballj][Balli - 1][2] = 0;
+			Ballx += 1;
+			Bally -= 1;
+			field[Bally][Ballx - 1][2] = 0;
 
 			break;
 		case (DOWN):
-			Ballj -= 1;
-			field[Ballj][Balli][1] = 0;
+			Bally -= 1;
+			field[Bally][Ballx][1] = 0;
 
 			break;
 		case (DOWN_RIGHT):
-			Balli -= 1;
-			Ballj -= 1;
-			field[Ballj][Balli][3] = 0;
+			Ballx -= 1;
+			Bally -= 1;
+			field[Bally][Ballx][3] = 0;
 
 			break;
 		}
@@ -244,89 +245,89 @@ public class field {
 	private void again(int direction) {
 		switch (direction) { // qweadyxc
 		case (UP_LEFT):
-			if (field[Ballj][Balli][0] != 0 || field[Ballj][Balli][1] != 0
-					|| field[Ballj][Balli - 1][2] != 0
-					|| field[Ballj][Balli - 1][0] != 0
-					|| field[Ballj - 1][Balli][2] != 0
-					|| field[Ballj - 1][Balli][1] != 0
-					|| field[Ballj - 1][Balli - 1][3] != 0) {
+			if (field[Bally][Ballx][0] != 0 || field[Bally][Ballx][1] != 0
+					|| field[Bally][Ballx - 1][2] != 0
+					|| field[Bally][Ballx - 1][0] != 0
+					|| field[Bally - 1][Ballx][2] != 0
+					|| field[Bally - 1][Ballx][1] != 0
+					|| field[Bally - 1][Ballx - 1][3] != 0) {
 				return;
 			} else {
 				break;
 			}
 		case (UP):
-			if (field[Ballj][Balli][0] != 0 || field[Ballj][Balli][3] != 0
-					|| field[Ballj][Balli - 1][2] != 0
-					|| field[Ballj][Balli - 1][0] != 0
-					|| field[Ballj - 1][Balli][2] != 0
-					|| field[Ballj - 1][Balli][1] != 0
-					|| field[Ballj - 1][Balli - 1][3] != 0) {
+			if (field[Bally][Ballx][0] != 0 || field[Bally][Ballx][3] != 0
+					|| field[Bally][Ballx - 1][2] != 0
+					|| field[Bally][Ballx - 1][0] != 0
+					|| field[Bally - 1][Ballx][2] != 0
+					|| field[Bally - 1][Ballx][1] != 0
+					|| field[Bally - 1][Ballx - 1][3] != 0) {
 				return;
 			} else {
 				break;
 			}
 		case (UP_RIGHT):
-			if (field[Ballj][Balli][0] != 0 || field[Ballj][Balli][1] != 0
-					|| field[Ballj][Balli][3] != 0
-					|| field[Ballj][Balli - 1][0] != 0
-					|| field[Ballj - 1][Balli][2] != 0
-					|| field[Ballj - 1][Balli][1] != 0
-					|| field[Ballj - 1][Balli - 1][3] != 0) {
+			if (field[Bally][Ballx][0] != 0 || field[Bally][Ballx][1] != 0
+					|| field[Bally][Ballx][3] != 0
+					|| field[Bally][Ballx - 1][0] != 0
+					|| field[Bally - 1][Ballx][2] != 0
+					|| field[Bally - 1][Ballx][1] != 0
+					|| field[Bally - 1][Ballx - 1][3] != 0) {
 				return;
 			} else {
 				break;
 			}
 		case (LEFT):
-			if (field[Ballj][Balli][1] != 0 || field[Ballj][Balli][3] != 0
-					|| field[Ballj][Balli - 1][2] != 0
-					|| field[Ballj][Balli - 1][0] != 0
-					|| field[Ballj - 1][Balli][2] != 0
-					|| field[Ballj - 1][Balli][1] != 0
-					|| field[Ballj - 1][Balli - 1][3] != 0) {
+			if (field[Bally][Ballx][1] != 0 || field[Bally][Ballx][3] != 0
+					|| field[Bally][Ballx - 1][2] != 0
+					|| field[Bally][Ballx - 1][0] != 0
+					|| field[Bally - 1][Ballx][2] != 0
+					|| field[Bally - 1][Ballx][1] != 0
+					|| field[Bally - 1][Ballx - 1][3] != 0) {
 				return;
 			} else {
 				break;
 			}
 		case (RIGHT):
-			if (field[Ballj][Balli][0] != 0 || field[Ballj][Balli][1] != 0
-					|| field[Ballj][Balli][3] != 0
-					|| field[Ballj][Balli - 1][2] != 0
-					|| field[Ballj - 1][Balli][2] != 0
-					|| field[Ballj - 1][Balli][1] != 0
-					|| field[Ballj - 1][Balli - 1][3] != 0) {
+			if (field[Bally][Ballx][0] != 0 || field[Bally][Ballx][1] != 0
+					|| field[Bally][Ballx][3] != 0
+					|| field[Bally][Ballx - 1][2] != 0
+					|| field[Bally - 1][Ballx][2] != 0
+					|| field[Bally - 1][Ballx][1] != 0
+					|| field[Bally - 1][Ballx - 1][3] != 0) {
 				return;
 			} else {
 				break;
 			}
 		case (DOWN_LEFT):
-			if (field[Ballj][Balli][0] != 0 || field[Ballj][Balli][1] != 0
-					|| field[Ballj][Balli][3] != 0
-					|| field[Ballj][Balli - 1][2] != 0
-					|| field[Ballj][Balli - 1][0] != 0
-					|| field[Ballj - 1][Balli][1] != 0
-					|| field[Ballj - 1][Balli - 1][3] != 0) {
+			if (field[Bally][Ballx][0] != 0 || field[Bally][Ballx][1] != 0
+					|| field[Bally][Ballx][3] != 0
+					|| field[Bally][Ballx - 1][2] != 0
+					|| field[Bally][Ballx - 1][0] != 0
+					|| field[Bally - 1][Ballx][1] != 0
+					|| field[Bally - 1][Ballx - 1][3] != 0) {
 				return;
 			} else {
 				break;
 			}
 		case (DOWN):
-			if (field[Ballj][Balli][0] != 0 || field[Ballj][Balli][1] != 0
-					|| field[Ballj][Balli][3] != 0
-					|| field[Ballj][Balli - 1][2] != 0
-					|| field[Ballj][Balli - 1][0] != 0
-					|| field[Ballj - 1][Balli][2] != 0
-					|| field[Ballj - 1][Balli - 1][3] != 0) {
+			if (field[Bally][Ballx][0] != 0 || field[Bally][Ballx][1] != 0
+					|| field[Bally][Ballx][3] != 0
+					|| field[Bally][Ballx - 1][2] != 0
+					|| field[Bally][Ballx - 1][0] != 0
+					|| field[Bally - 1][Ballx][2] != 0
+					|| field[Bally - 1][Ballx - 1][3] != 0) {
 				return;
 			} else {
 				break;
 			}
 		case (DOWN_RIGHT):
-			if (field[Ballj][Balli][0] != 0 || field[Ballj][Balli][1] != 0
-					|| field[Ballj][Balli][3] != 0
-					|| field[Ballj][Balli - 1][2] != 0
-					|| field[Ballj][Balli - 1][0] != 0
-					|| field[Ballj - 1][Balli][2] != 0
-					|| field[Ballj - 1][Balli][1] != 0) {
+			if (field[Bally][Ballx][0] != 0 || field[Bally][Ballx][1] != 0
+					|| field[Bally][Ballx][3] != 0
+					|| field[Bally][Ballx - 1][2] != 0
+					|| field[Bally][Ballx - 1][0] != 0
+					|| field[Bally - 1][Ballx][2] != 0
+					|| field[Bally - 1][Ballx][1] != 0) {
 				return;
 			} else {
 				break;
@@ -342,19 +343,19 @@ public class field {
 	// Testet ob der Ball im Tor ist
 	public boolean isWinner(Player test) {
 
-		if (Balli == 1) {
+		if (Ballx == 1) {
 			two.intern_winner= true;
 		}
-		if (Balli == 13) {
+		if (Ballx == 13) {
 			one.intern_winner=true;
 		}
-		if (field[Ballj][Balli][0] != 0 && field[Ballj][Balli][1] != 0
-				&& field[Ballj][Balli][3] != 0
-				&& field[Ballj][Balli - 1][2] != 0
-				&& field[Ballj][Balli - 1][0] != 0
-				&& field[Ballj - 1][Balli][2] != 0
-				&& field[Ballj - 1][Balli][1] != 0
-				&& field[Ballj - 1][Balli - 1][3] != 0) {
+		if (field[Bally][Ballx][0] != 0 && field[Bally][Ballx][1] != 0
+				&& field[Bally][Ballx][3] != 0
+				&& field[Bally][Ballx - 1][2] != 0
+				&& field[Bally][Ballx - 1][0] != 0
+				&& field[Bally - 1][Ballx][2] != 0
+				&& field[Bally - 1][Ballx][1] != 0
+				&& field[Bally - 1][Ballx - 1][3] != 0) {
 			if (player == 2) {
 				one.intern_winner=true;
 			}
@@ -379,20 +380,24 @@ public class field {
 	}
 
 	// KI
-	public String getBestShoots() {
+	public String getBestShoot() {
 		String AI_shoot;
 
 		testField = new field(this);
 		pList.clear();
-		max_turn_quality = -20;
+		max_turn_quality = -30;
 		testDirections("", 0);
-		AI_shoot = pList.get((int) Math.floor(1+Math.random()*(pList.size()-1)));
-		System.out.println("\n shoot: "+AI_shoot);
+		Random random = new Random();
+		AI_shoot = pList.get(random.nextInt((pList.size()-1)-0+1));
+		System.out.println(max_turn_quality);
+		System.out.println(pList.toString());
 		return AI_shoot;
 	}
 
 	private void testDirections(String turn, int quality) {
 		int temp_quality;
+		int ball_quality = Ballx;
+		boolean goal = false;
 		for(int i = 0; i<8;i++){
 			temp_quality = quality;
 			//Durchläuft alle 8 Richtungen
@@ -401,6 +406,16 @@ public class field {
 				testField.shoot(i);
 				turn = turn + i;
 				temp_quality += quality_of_direction[i];
+				if(ball_quality-temp_quality == 1 || goal == true){
+					pList.clear();
+					pList.add(turn);
+					System.out.println("Ich kann ein Tor schießen");
+					return;
+				}
+				if(ball_quality-temp_quality == 13){
+					System.out.println("Oh nein, ich schieße kein Eigentor!");
+					return;
+				}
 				if (testField.player == 3) {
 					//Wenn der Spieler nochmal an der Reihe ist -> Rekursion
 					testDirections(turn, temp_quality);
@@ -423,11 +438,4 @@ public class field {
 			}
 		}
 	}
-	
-	//Bewegung der AI
-	public void AI_turn(int dir)
-	{
-		shoot(dir);		
-	}
-
 }
