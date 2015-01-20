@@ -139,7 +139,7 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 
 		this.one = one;
 		this.two = two;
-		Feld = new field(one,two);
+		Feld = new field(one, two);
 		Frame.setTitle("Project F >> " + one.score + " : " + two.score);
 		Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Frame.toFront();
@@ -188,16 +188,13 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 	}
 
 	private void setWinner() {
-		
-		if(Feld.isWinner(one)){
-			JOptionPane
-			.showMessageDialog(null, one.name + " hat gewonnen!");
+
+		if (Feld.isWinner(one)) {
+			JOptionPane.showMessageDialog(null, one.name + " hat gewonnen!");
 			Frame.dispose();
 			new Overview(one, two, one);
-		}
-		else if(Feld.isWinner(two)){
-			JOptionPane
-			.showMessageDialog(null, two.name + " hat gewonnen!");
+		} else if (Feld.isWinner(two)) {
+			JOptionPane.showMessageDialog(null, two.name + " hat gewonnen!");
 			Frame.dispose();
 			new Overview(one, two, two);
 		}
@@ -218,10 +215,12 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		Feld.shoot(getDirection(e.getX(), e.getY()));
-		setWinner();
-		if (Feld.getPlayer() == 3 && Feld.getPrev_Player() != 3)
-			Feld.getBestShoots();
+		if (Feld.getPlayer() == 2) {
+			Feld.shoot(getDirection(e.getX(), e.getY()));
+			setWinner();
+		}else{
+			Feld.AI_turn();
+		}
 		Panel.repaint();
 	}
 

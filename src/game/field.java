@@ -384,7 +384,7 @@ public class field {
 
 		testField = new field(this);
 		pList.clear();
-		max_turn_quality = 0;
+		max_turn_quality = -20;
 		testDirections("", 0);
 		AI_shoot = pList.get((int) Math.floor(1+Math.random()*(pList.size()-1)));
 		System.out.println("\n shoot: "+AI_shoot);
@@ -422,6 +422,18 @@ public class field {
 				testField.goBack(i,3);
 			}
 		}
+	}
+	
+	//Bewegung der AI
+	public void AI_turn()
+	{
+		String AI_shoots = getBestShoots();
+		for(int i = 0; i < AI_shoots.length(); i++)
+		{
+			System.out.println((int)AI_shoots.charAt(i)- 48);
+			shoot(((int) AI_shoots.charAt(i) - 48));
+		}
+		
 	}
 
 }
