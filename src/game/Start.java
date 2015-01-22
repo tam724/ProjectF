@@ -47,7 +47,7 @@ public class Start implements ActionListener {
 		Panel.add(NameOne);
 		Panel.add(ColorButtonOne);
 		Panel.add(NameOneOk);
-		
+
 		Panel.add(NameTwo);
 		Panel.add(ColorButtonTwo);
 		Panel.add(NameTwoOk);
@@ -68,9 +68,9 @@ public class Start implements ActionListener {
 			Panel.remove(NameOneOk);
 			Panel.remove(ColorButtonOne);
 			oneOk = true;
-			if(oneOk && twoOk){
+			if (oneOk && twoOk) {
 				Frame.dispose();
-				new Game(one, two,field.PLAYER_ONE);
+				new Game(one, two, field.PLAYER_ONE);
 			}
 		}
 		if (e.getSource() == NameTwoOk) {
@@ -80,9 +80,9 @@ public class Start implements ActionListener {
 			Panel.remove(NameTwoOk);
 			Panel.remove(NameTwoOk);
 			twoOk = true;
-			if(oneOk && twoOk){
+			if (oneOk && twoOk) {
 				Frame.dispose();
-				new Game(one, two,field.PLAYER_TWO);
+				new Game(one, two, field.PLAYER_TWO);
 			}
 		}
 		if (e.getSource() == ColorButtonOne) {

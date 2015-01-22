@@ -8,8 +8,8 @@ public class Player {
 	int intern_id;
 	boolean intern_winner = false;
 	String name;
-	
-	Player(Color c, String name){
+
+	Player(Color c, String name) {
 		this.name = name;
 		color = c;
 	}

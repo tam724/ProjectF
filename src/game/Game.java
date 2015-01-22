@@ -238,7 +238,6 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 				setWinner();
 				Panel.repaint();
 			}
-
 		}
 	}
 
