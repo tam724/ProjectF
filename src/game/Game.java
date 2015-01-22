@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class Spiel extends JFrame implements MouseListener, MouseMotionListener {
+public class Game extends JFrame implements MouseListener, MouseMotionListener {
 
 	private static final long serialVersionUID = 1L;
 	field Feld;
@@ -135,7 +135,7 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 	Player one;
 	Player two;
 
-	public Spiel(Player one, Player two,int beginner) {
+	public Game(Player one, Player two,int beginner) {
 
 		this.one = one;
 		this.two = two;

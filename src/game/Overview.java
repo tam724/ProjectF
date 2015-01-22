@@ -83,7 +83,7 @@ public class Overview implements ActionListener {
 			}
 			if(playeroneready && playertwoready){
 				Frame.dispose();
-				new Spiel(one, two,starter);
+				new Game(one, two,starter);
 			}
 			setButtonText(ButtonOne, playeroneready, one.score, 1);
 			Panel.repaint();
@@ -96,7 +96,7 @@ public class Overview implements ActionListener {
 			}
 			if(playeroneready && playertwoready){
 				Frame.dispose();
-				new Spiel(one, two,starter);
+				new Game(one, two,starter);
 			}
 			setButtonText(ButtonTwo, playertwoready, two.score, 2);
 			Panel.repaint();
