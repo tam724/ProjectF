@@ -409,7 +409,7 @@ public class field {
                 if (ball_quality - temp_quality == enemy_goal) {
                     //Damit die KI kein Eigentor schieﬂt
                     turn = turn.substring(0, turn.length() - 1);
-                    testField.goBack(i, 3);
+                    testField.goBack(i, player);
                     continue;
                 }
                 if (testField.currentplayer == player) {
@@ -428,7 +428,7 @@ public class field {
                     }
                 }
                 turn = turn.substring(0, turn.length() - 1);
-                testField.goBack(i, 3);
+                testField.goBack(i, player);
             }
         }
     }
