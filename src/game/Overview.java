@@ -20,16 +20,16 @@ public class Overview implements ActionListener {
 	JButton ButtonTwo = new JButton();
 	JButton Save = new JButton();
 	JButton ButtonQuit = new JButton();
-	Player starter;
+	int starter;
 
 	Overview(Player one, Player two, Player winner) {
 		this.one = one;
 		this.two = two;
 		if (winner == one){
-			starter = two;
+			starter = field.PLAYER_TWO;
 		}
 		else if (winner == two){
-			starter = one;
+			starter = field.PLAYER_ONE;
 		}
 
 		Frame.setTitle("Project F >> "+one.score+" : "+ two.score);
@@ -83,7 +83,7 @@ public class Overview implements ActionListener {
 			}
 			if(playeroneready && playertwoready){
 				Frame.dispose();
-				new Spiel(one, two);
+				new Spiel(one, two,starter);
 			}
 			setButtonText(ButtonOne, playeroneready, one.score, 1);
 			Panel.repaint();
@@ -96,7 +96,7 @@ public class Overview implements ActionListener {
 			}
 			if(playeroneready && playertwoready){
 				Frame.dispose();
-				new Spiel(one, two);
+				new Spiel(one, two,starter);
 			}
 			setButtonText(ButtonTwo, playertwoready, two.score, 2);
 			Panel.repaint();

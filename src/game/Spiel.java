@@ -39,9 +39,9 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 						g2.fill(circlepoint);
 
 						// Zeiger
-						if (Feld.getPlayer() == 2) {
+						if (Feld.getCurrentPlayer() == field.PLAYER_ONE) {
 							g.setColor(one.color);
-						} else if (Feld.getPlayer() == 3) {
+						} else if (Feld.getCurrentPlayer() == field.PLAYER_TWO) {
 							g.setColor(two.color);
 						}
 						g2.setStroke(new BasicStroke(1));
@@ -135,11 +135,11 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 	Player one;
 	Player two;
 
-	public Spiel(Player one, Player two) {
+	public Spiel(Player one, Player two,int beginner) {
 
 		this.one = one;
 		this.two = two;
-		Feld = new field(one, two);
+		Feld = new field(beginner);
 		Frame.setTitle("Project F >> " + one.score + " : " + two.score);
 		Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Frame.toFront();
@@ -189,14 +189,20 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 
 	private void setWinner() {
 
-		if (Feld.isWinner(one)) {
-			JOptionPane.showMessageDialog(null, one.name + " hat gewonnen!");
-			Frame.dispose();
-			new Overview(one, two, one);
-		} else if (Feld.isWinner(two)) {
-			JOptionPane.showMessageDialog(null, two.name + " hat gewonnen!");
-			Frame.dispose();
-			new Overview(one, two, two);
+		if (Feld.isWinner()) {
+			if (Feld.getWinner() == field.PLAYER_ONE) {
+				JOptionPane
+						.showMessageDialog(null, one.name + " hat gewonnen!");
+				Frame.dispose();
+				one.score++;
+				new Overview(one, two, one);
+			} else if (Feld.getWinner() == field.PLAYER_TWO) {
+				JOptionPane
+						.showMessageDialog(null, two.name + " hat gewonnen!");
+				Frame.dispose();
+				two.score++;
+				new Overview(one, two, two);
+			}
 		}
 	}
 
@@ -215,12 +221,12 @@ public class Spiel extends JFrame implements MouseListener, MouseMotionListener 
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (Feld.getPlayer() == 2) {
+		if (Feld.getCurrentPlayer() == 2) {
 			Feld.shoot(getDirection(e.getX(), e.getY()));
 			setWinner();
 			Panel.repaint();
 		} else {
-			String AI_shoot = Feld.getBestShoot();
+			String AI_shoot = Feld.getBestShoot(field.PLAYER_TWO);
 			for (int i = 0; i < AI_shoot.length(); i++) {
 				Feld.shoot(((int) AI_shoot.charAt(i) - 48));
 				setWinner();
