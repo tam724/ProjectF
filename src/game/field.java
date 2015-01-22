@@ -370,7 +370,10 @@ public class field {
         pList.clear();
         max_turn_quality = -30;
         testDirections("", 0, player);
-        return pList.get(new Random().nextInt((pList.size() - 1) - 0 + 1));
+        if(pList.size() > 0)
+        	return pList.get(new Random().nextInt((pList.size() - 1) - 0 + 1));
+        else
+        	return null;
     }
 
     private void testDirections(String turn, int quality, int player) {

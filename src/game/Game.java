@@ -135,7 +135,7 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 	Player one;
 	Player two;
 
-	public Game(Player one, Player two,int beginner) {
+	public Game(Player one, Player two, int beginner) {
 
 		this.one = one;
 		this.two = two;
@@ -221,17 +221,24 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (Feld.getCurrentPlayer() == 2) {
+		if (Feld.getCurrentPlayer() == field.PLAYER_ONE) {
 			Feld.shoot(getDirection(e.getX(), e.getY()));
 			setWinner();
 			Panel.repaint();
 		} else {
 			String AI_shoot = Feld.getBestShoot(field.PLAYER_TWO);
-			for (int i = 0; i < AI_shoot.length(); i++) {
-				Feld.shoot(((int) AI_shoot.charAt(i) - 48));
+			System.out.println(AI_shoot);
+			if (AI_shoot != null) {
+				for (int i = 0; i < AI_shoot.length(); i++) {
+					Feld.shoot(((int) AI_shoot.charAt(i) - 48));
+					setWinner();
+					Panel.repaint();
+				}
+			} else {
 				setWinner();
 				Panel.repaint();
 			}
+
 		}
 	}
 
