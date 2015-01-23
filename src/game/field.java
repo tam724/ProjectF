@@ -21,6 +21,12 @@ public class field {
 	static final int PLAYER_ONE = 2;
 	static final int PLAYER_TWO = 3;
 	static final int OUT_OF_GAME = 4;
+	
+    //DIFFICULTIES OF THE AI
+    static final int DIFFICULTY_SIMPLE = 0;
+    static final int DIFFICULTY_MIDDLE = 1;
+    static final int DIFFICULTY_STRONG = 2;
+
 
 	private int[][][] field = {
 			{ { 4, 4, 4, 4 }, { 4, 4, 4, 4 }, { 4, 4, 4, 4 }, { 4, 4, 4, 4 },
@@ -83,9 +89,11 @@ public class field {
 	private static field testField;
 	private static int max_turn_quality = 0;
 	private static int[] quality_of_direction = { 0, -1, -1, -1, 0, 1, 1, 1 };
-	public static ArrayList<String> pList = new ArrayList<>();
+    public static ArrayList<ArrayList<String>> pList = new ArrayList<>();
 	public static int[] own_goal = { 13, 1 };
 	public static int[] enemy_goal = { 1, 13 };
+	public static boolean AI_goal = false;
+    public static boolean AI_loose = false;
 
 	public field(int startplayer) {
 		if (startplayer == PLAYER_ONE) {
@@ -112,6 +120,16 @@ public class field {
 			}
 		}
 	}
+	
+	public int getOpponent(int player){
+        if(player == PLAYER_ONE){
+            return PLAYER_TWO;
+        }
+        else if(player == PLAYER_TWO){
+            return PLAYER_ONE;
+        }
+        else return 0;
+    }
 
 	// Gibt Wert des Feldes zurück
 	public int getValue(int i, int j, int k) {
@@ -371,66 +389,109 @@ public class field {
 	}
 
 	// KI
-	public String getBestShoot(int player) {
-		testField = new field(this);
-		pList.clear();
-		max_turn_quality = -30;
-		testDirections("", 0, player);
-		if (pList.size() > 0)
-			return pList.get(new Random().nextInt((pList.size() - 1) - 0 + 1));
-		else
-			return null;
-	}
+	public String getBestShoot(int player, int difficulty){
+        testField = new field(this);
+        AI_goal = false;
+        pList.clear();
+        max_turn_quality = -30;
+        pList.add(new ArrayList<String>());
+        pList.add(new ArrayList<String>());
+        pList.add(new ArrayList<String>());
+        testDirections("", 0, player);
+        for (int i = 0; i < pList.size(); i++) {
+            if (pList.get(i).isEmpty()) {
+                pList.remove(i);
+            }
+
+        }
+        if(pList.isEmpty()){
+            winplayer = getOpponent(player);
+            AI_loose = true;
+            return "loose";
+
+        }
+        if (difficulty == DIFFICULTY_SIMPLE) {
+            //Remove nothing
+        } else if (difficulty == DIFFICULTY_MIDDLE && pList.size() > 2) {
+            pList.remove(2);
+        } else if (difficulty == DIFFICULTY_STRONG && pList.size() > 2) {
+            pList.remove(2);
+            pList.remove(1);
+        }
+
+        int rand_list_num = new Random().nextInt((pList.size() - 1) - 0 + 1);
+        assert (rand_list_num >= 0 && rand_list_num < 3);
+        int rand_intern_list_num = new Random().nextInt((pList.get(rand_list_num).size() - 1) - 0 + 1);
+        return pList.get(rand_list_num).get(rand_intern_list_num);
+    }
 
 	private void testDirections(String turn, int quality, int player) {
-		int temp_quality;
-		boolean goal = false;
-		for (int i = 0; i < 8; i++) {
-			temp_quality = quality;
-			// Durchläuft alle 8 Richtungen
-			if (testField.isValidShoot(i)) {
-				// Wenn ich in diese Richtung spielen kann
-				testField.shoot(i);
-				turn = turn + i;
-				// In welche Richtung soll die KI spielen?
-				if (player == PLAYER_ONE) {
-					temp_quality -= quality_of_direction[i];
-				} else {
-					temp_quality += quality_of_direction[i];
-				}
-				if (Ballx - temp_quality == own_goal[player - 2] || goal) {
-					// Wenn die KI ein Tor schießen kann, macht sie es
-					pList.clear();
-					pList.add(turn);
-					testField.goBack(i, player);
-					return;
-				}
-				if (Ballx - temp_quality == enemy_goal[player - 2]) {
-					// Damit die KI kein Eigentor schießt
-					turn = turn.substring(0, turn.length() - 1);
-					testField.goBack(i, player);
-					continue;
-				}
-				if (testField.currentplayer == player) {
-					// Wenn der Spieler nochmal an der Reihe ist -> Rekursion
-					testDirections(turn, temp_quality, player);
-				} else {
-					// Wenn der Spieler nicht mehr an der Reihe ist -> Maximum
-					// testen
-					if (max_turn_quality < temp_quality) {
-						// Wenn aktuell getesteter Zug besser als vorherige ist
-						pList.clear();
-						pList.add(turn);
-						max_turn_quality = temp_quality;
-					} else if (max_turn_quality == temp_quality) {
-						// Wenn der beste und der aktuelle gleich gut sind
-						pList.add(turn);
-					}
-				}
-				turn = turn.substring(0, turn.length() - 1);
-				testField.goBack(i, player);
-			}
-		}
-	}
+        int temp_quality;
+        for (int i = 0; i < 8; i++) {
+            if (AI_goal) {
+                //Wenn die AI ein Tor geschosssen hat, wird die gesamte rekursion abgebaut!
+                return;
+            } else {
+                temp_quality = quality;
+                // Durchläuft alle 8 Richtungen
+                if (testField.isValidShoot(i)) {
+                    // Wenn ich in diese Richtung spielen kann
+                    // System.out.println("Teste Richtung: "+i);
+                    testField.shoot(i);
+                    turn = turn + i;
+                    // In welche Richtung soll die KI spielen?
+                    if (player == PLAYER_ONE) {
+                        temp_quality -= quality_of_direction[i];
+                    } else {
+                        temp_quality += quality_of_direction[i];
+                    }
+                    if (Ballx - temp_quality == own_goal[player - 2]) {
+                        // Wenn die KI ein Tor schießen kann, macht sie es
+                        // System.out.println("Ich kann ein Tor schießen");
+                        pList.clear();
+                        pList.add(new ArrayList<String>());
+                        pList.get(0).add(turn);
+                        AI_goal = true;
+                        testField.goBack(i, player);
+                        return;
+                    }
+                    if (Ballx - temp_quality == enemy_goal[player - 2]) {
+                        // Damit die KI kein Eigentor schießt
+                        // System.out.println("Nein, ich schieße kein Eigentor!");
+                        turn = turn.substring(0, turn.length() - 1);
+                        testField.goBack(i, player);
+                        continue;
+                    }
+                    if (testField.currentplayer == player) {
+                        // Wenn der Spieler nochmal an der Reihe ist -> Rekursion
+                        // System.out.println("Ich bin nochmal, starte Rekursion");
+                        testDirections(turn, temp_quality, player);
+                        //System.out.println("weiter gehts :)");
+                    } else {
+                        // Wenn der Spieler nicht mehr an der Reihe ist -> Maximum
+                        // testen
+                        if (max_turn_quality < temp_quality) {
+                            // Wenn aktuell getesteter Zug besser als vorherige ist
+                            pList.remove(2);
+                            pList.add(0, new ArrayList<String>());
+                            pList.get(0).add(turn);
+                            max_turn_quality = temp_quality;
+                        } else if (max_turn_quality == temp_quality) {
+                            // Wenn der beste und der aktuelle gleich gut sind
+                            pList.get(0).add(turn);
+                        } else if (max_turn_quality - 1 == temp_quality) {
+                            //Wenn der beste um eins bessser ist als der aktuelle (Schwierigkeitsgrad)
+                            pList.get(1).add(turn);
+                        } else if (max_turn_quality - 2 == temp_quality) {
+                            //Wenn der beste um zwei besser ist als der aktuelle (Schwierigkeitsgrad)
+                            pList.get(2).add(turn);
+                        }
+                    }
+                    turn = turn.substring(0, turn.length() - 1);
+                    testField.goBack(i, player);
+                }
+            }
+        }
+    }
 
 }
