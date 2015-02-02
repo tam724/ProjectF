@@ -226,7 +226,10 @@ public class Game extends JFrame implements MouseListener, MouseMotionListener {
 			setWinner();
 			Panel.repaint();
 		} else {
-			String AI_shoot = Feld.getBestShoot(field.PLAYER_TWO,field.DIFFICULTY_MIDDLE);
+			String AI_shoot = Feld.getBestShoot(field.PLAYER_TWO,
+					field.DIFFICULTY_HARD
+
+			);
 			System.out.println(AI_shoot);
 			if (AI_shoot != null) {
 				for (int i = 0; i < AI_shoot.length(); i++) {
